@@ -1,0 +1,2876 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ZARIA — одна ночь</title>
+<meta name="description" content="Лампа-рассвет ZARIA One, приложение и протокол сна. Одна ночь: от 21:30 до 06:40.">
+<meta name="theme-color" content="#0B0C10">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ZARIA — одна ночь">
+<meta property="og:description" content="Лампа-рассвет ZARIA One, приложение и протокол сна. Одна ночь: от 21:30 до 06:40.">
+<meta property="og:image" content="img/za-05.webp">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230B0C10'/%3E%3Cpath d='M7 21.5h18' stroke='%23F2C29B' stroke-width='1.8' stroke-linecap='round'/%3E%3Cpath d='M9.5 21.5a6.5 6.5 0 0 1 13 0z' fill='%23F2C29B'/%3E%3C/svg%3E">
+<link rel="preload" href="fonts/zk-cyrillic-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/zk-cyrillic-500.woff2" as="font" type="font/woff2" crossorigin>
+<script type="importmap">
+{
+  "imports": {
+    "three": "./vendor/three.module.min.js"
+  }
+}
+</script>
+<style>
+/* шрифт лежит рядом с сайтом: ни одного запроса к сторонним серверам */
+@font-face{font-family:'Zen Kaku Gothic New';font-style:normal;font-weight:300;font-display:swap;src:url(fonts/zk-107-300.woff2) format('woff2');unicode-range:U+23,U+3c,U+2192,U+4e45,U+4efb,U+4f50,U+4f8b,U+4fc2,U+5024,U+5150,U+5272,U+5370,U+53bb,U+542b,U+56db,U+56e3,U+57ce,U+5bc4,U+5bcc,U+5f71,U+60aa,U+6238,U+6280,U+629c,U+6539,U+66ff,U+670d,U+677e-677f,U+6839,U+69cb,U+6b4c,U+6bb5,U+6e96,U+6f14,U+72ec,U+7389,U+7814,U+79cb,U+79d1,U+79fb,U+7a0e,U+7d0d,U+85e4,U+8d64,U+9632,U+96e2,U+9805,U+99ac,U+ff1e}
+@font-face{font-family:'Zen Kaku Gothic New';font-style:normal;font-weight:300;font-display:swap;src:url(fonts/zk-cyrillic-300.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Zen Kaku Gothic New';font-style:normal;font-weight:300;font-display:swap;src:url(fonts/zk-latin-ext-300.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Zen Kaku Gothic New';font-style:normal;font-weight:300;font-display:swap;src:url(fonts/zk-latin-300.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Zen Kaku Gothic New';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/zk-107-400.woff2) format('woff2');unicode-range:U+23,U+3c,U+2192,U+4e45,U+4efb,U+4f50,U+4f8b,U+4fc2,U+5024,U+5150,U+5272,U+5370,U+53bb,U+542b,U+56db,U+56e3,U+57ce,U+5bc4,U+5bcc,U+5f71,U+60aa,U+6238,U+6280,U+629c,U+6539,U+66ff,U+670d,U+677e-677f,U+6839,U+69cb,U+6b4c,U+6bb5,U+6e96,U+6f14,U+72ec,U+7389,U+7814,U+79cb,U+79d1,U+79fb,U+7a0e,U+7d0d,U+85e4,U+8d64,U+9632,U+96e2,U+9805,U+99ac,U+ff1e}
+@font-face{font-family:'Zen Kaku Gothic New';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/zk-cyrillic-400.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Zen Kaku Gothic New';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/zk-latin-ext-400.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Zen Kaku Gothic New';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/zk-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Zen Kaku Gothic New';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/zk-107-500.woff2) format('woff2');unicode-range:U+23,U+3c,U+2192,U+4e45,U+4efb,U+4f50,U+4f8b,U+4fc2,U+5024,U+5150,U+5272,U+5370,U+53bb,U+542b,U+56db,U+56e3,U+57ce,U+5bc4,U+5bcc,U+5f71,U+60aa,U+6238,U+6280,U+629c,U+6539,U+66ff,U+670d,U+677e-677f,U+6839,U+69cb,U+6b4c,U+6bb5,U+6e96,U+6f14,U+72ec,U+7389,U+7814,U+79cb,U+79d1,U+79fb,U+7a0e,U+7d0d,U+85e4,U+8d64,U+9632,U+96e2,U+9805,U+99ac,U+ff1e}
+@font-face{font-family:'Zen Kaku Gothic New';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/zk-cyrillic-500.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Zen Kaku Gothic New';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/zk-latin-ext-500.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Zen Kaku Gothic New';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/zk-latin-500.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Zen Kaku Gothic New';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/zk-107-700.woff2) format('woff2');unicode-range:U+23,U+3c,U+2192,U+4e45,U+4efb,U+4f50,U+4f8b,U+4fc2,U+5024,U+5150,U+5272,U+5370,U+53bb,U+542b,U+56db,U+56e3,U+57ce,U+5bc4,U+5bcc,U+5f71,U+60aa,U+6238,U+6280,U+629c,U+6539,U+66ff,U+670d,U+677e-677f,U+6839,U+69cb,U+6b4c,U+6bb5,U+6e96,U+6f14,U+72ec,U+7389,U+7814,U+79cb,U+79d1,U+79fb,U+7a0e,U+7d0d,U+85e4,U+8d64,U+9632,U+96e2,U+9805,U+99ac,U+ff1e}
+@font-face{font-family:'Zen Kaku Gothic New';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/zk-cyrillic-700.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Zen Kaku Gothic New';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/zk-latin-ext-700.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Zen Kaku Gothic New';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/zk-latin-700.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+/* =============================================================== tokens */
+:root{
+  --night:#0B0C10;
+  --ink:#141311;
+  --dusk:#241F1B;
+  --ember:#D9835A;
+  --ember-deep:#C9744C;
+  --apricot:#F2C29B;
+  --glow:#F4B98A;
+  --oat:#EFE7DB;
+  --linen:#F8F3EA;
+  --paper:#EDE5D6;
+  --card:#FDFAF3;
+  --ash:#8A8078;
+
+  --rule-d:rgba(248,243,234,.16);
+  --rule-l:rgba(20,19,17,.14);
+
+  /* the horizon: one line the whole site is built on */
+  --hz:70vh;
+  --lx:60%;
+
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --spring:cubic-bezier(.34,1.32,.5,1);
+
+  /* nothing on this site has a sharp corner: the product is a dome */
+  --r-xs:12px;
+  --r-s:18px;
+  --r-m:26px;
+  --r-l:36px;
+  --r-xl:48px;
+  --r-arch:999px 999px var(--r-l) var(--r-l);
+  --pill:999px;
+
+  --soft-1:0 1px 2px rgba(58,38,20,.04),0 14px 30px -18px rgba(58,38,20,.24);
+  --soft-2:0 2px 6px rgba(58,38,20,.05),0 30px 60px -30px rgba(58,38,20,.36);
+
+  --night-vh:820vh;
+
+  --font:"Zen Kaku Gothic New",system-ui,-apple-system,"Segoe UI",sans-serif;
+
+  /* ---- spacing: one 8-grid, stepped at breakpoints, exactly the way the
+     reference spaces its content (8 / 16 / 24 / 40 / 64 / 96 / 144). Every
+     gap on the site comes from here, so nothing is ever out of step. ---- */
+  --sp-1:8px;
+  --sp-2:16px;
+  --sp-3:24px;
+  --sp-4:40px;
+  --sp-5:64px;
+  --sp-6:96px;
+  --sp-7:144px;
+  --gutter:40px;
+
+  /* ---- type: the reference's own scale. Display is one face at 400 with
+     -.03em; body is a fixed 16/1.625 at 300; labels are 14 and 13. ---- */
+  --fz-hero:min(6.2vw,92px);
+  --fz-h2:clamp(30px,3.3vw,48px);
+  --fz-h3:clamp(22px,2.05vw,30px);
+  --fz-num:clamp(40px,4.4vw,68px);
+  --fz-lead:16px;
+  --fz-body:15px;
+  --fz-label:14px;
+  --fz-micro:13px;
+  --lh-disp:.98;
+  --lh-lead:1.34;
+  --lh-body:1.3;
+  --fw-head:500;
+
+  /* ---- the floating nav plate ---- */
+  --tile-plate:#D6CCBB;
+  --tile:#FBF8F1;
+  --tile-ink:#1A1714;
+  --tile-h:42px;
+  --tile-r:10px;
+}
+@media (max-width:1024px){
+  :root{ --sp-4:32px; --sp-5:48px; --sp-6:72px; --sp-7:104px; --gutter:32px }
+}
+@media (max-width:640px){
+  :root{ --sp-3:20px; --sp-4:28px; --sp-5:40px; --sp-6:56px; --sp-7:80px;
+         --gutter:20px; --fz-lead:15px; --tile-h:50px }
+}
+@media (max-aspect-ratio: 1/1){ :root{ --hz:64vh; --lx:75%; --night-vh:620vh } }
+
+/* =============================================================== reset */
+*,*::before,*::after{margin:0;box-sizing:border-box}
+html{font-size:16px;scrollbar-width:none;-ms-overflow-style:none;-webkit-text-size-adjust:100%}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
+body{
+  background:var(--night);color:var(--linen);overflow-x:hidden;
+  font-family:var(--font);font-weight:300;letter-spacing:-.004em;line-height:1.3;
+  /* никаких автопереносов со слогами: слово переносится только целиком */
+  -webkit-hyphens:none;hyphens:none;overflow-wrap:normal;word-break:normal;
+  -webkit-font-smoothing:antialiased;scrollbar-width:none;
+}
+img,canvas,svg{display:block}
+a{color:inherit;text-decoration:none}
+ul,ol{list-style:none;padding:0}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+input{font:inherit}
+::selection{background:var(--apricot);color:var(--ink)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:2px solid var(--apricot);outline-offset:3px;border-radius:4px}
+.day :focus-visible,.nav.is-day :focus-visible{outline-color:var(--ember)}
+
+/* One family, the way the reference does it: size and weight carry the
+   hierarchy, never a second typeface. Display sits at 400 with the tracking
+   pulled in; emphasis is 700 of the same face. */
+.disp{font-weight:var(--fw-head);letter-spacing:-.032em;line-height:var(--lh-disp)}
+p,li,dd,blockquote,figcaption,small{text-wrap:pretty}
+.disp b{font-weight:700;letter-spacing:-.03em}
+.sans{font-weight:400}
+.mono{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+.num{font-weight:var(--fw-head);letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+.num .u{font-weight:300;font-size:.58em;letter-spacing:-.012em;opacity:.6}
+
+
+/* =============================================================== loader */
+.ldr{
+  position:fixed;inset:0;z-index:200;background:var(--night);overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+/* the mark is drawn, not faded in: the line arrives, then the disc rises behind it */
+.ldr__line{
+  position:absolute;left:50%;top:50%;height:1px;background:var(--linen);
+  transform:translate(-50%,-50%);width:0;
+}
+.ldr__disc{
+  position:absolute;left:50%;bottom:0;width:132px;height:132px;border-radius:50%;
+  background:radial-gradient(circle,#FFF6E7 0%,#FFE0B6 40%,#F3AE75 70%,#D9835A 100%);
+  transform:translate(-50%,100%);
+  filter:drop-shadow(0 -6px 40px rgba(244,185,138,.55));
+}
+.ldr__clip{
+  position:absolute;left:0;right:0;top:0;bottom:50%;overflow:hidden;pointer-events:none;
+}
+.ldr__word{
+  position:absolute;left:50%;top:calc(50% + 46px);transform:translateX(-50%);
+  font-size:12px;font-weight:500;letter-spacing:.46em;text-transform:uppercase;color:var(--linen);opacity:0;
+}
+.ldr__k{
+  position:absolute;left:50%;bottom:11vh;transform:translateX(-50%);
+  font-size:12.5px;letter-spacing:.02em;color:rgba(248,243,234,.5);opacity:0;
+}
+
+/* =============================================================== chrome */
+/* One floating object, assembled from tiles on a plate — it reads the same
+   over the night and over the paper, so the page has one constant anchor. */
+.bar{
+  position:fixed;left:0;right:0;top:calc(var(--sp-2) + env(safe-area-inset-top));z-index:100;
+  display:flex;flex-direction:column;align-items:center;pointer-events:none;
+  padding:0 var(--sp-2);
+  opacity:0;transform:translateY(-10px);
+  transition:opacity .8s var(--ease),transform .8s var(--ease);
+}
+.bar.on{opacity:1;transform:none}
+
+/* One capsule, one surface. It carries the night on it: the little dome
+   beside the wordmark fills with warm light exactly as the lamp does, and
+   the whole thing turns from glass to paper when the day arrives. */
+.nav{
+  pointer-events:auto;position:relative;display:flex;align-items:center;max-width:100%;
+  height:var(--tile-h);padding:0 5px 0 4px;border-radius:var(--pill);
+  background:rgba(23,20,18,.8);border:1px solid rgba(248,243,234,.2);
+  color:var(--linen);
+  box-shadow:0 16px 40px -20px rgba(0,0,0,.7);
+  transition:background .7s var(--ease),border-color .7s var(--ease),color .7s var(--ease),box-shadow .7s var(--ease);
+}
+.nav.is-day{
+  background:#FBF8F1;border-color:rgba(20,19,17,.09);color:var(--ink);
+  box-shadow:0 16px 40px -22px rgba(58,38,20,.45);
+}
+.nav__mark{
+  display:inline-flex;align-items:center;gap:10px;flex:none;
+  height:calc(var(--tile-h) - 10px);padding:0 16px 0 12px;border-radius:var(--pill);
+  font-size:13.5px;font-weight:500;letter-spacing:.16em;
+}
+/* the mark is the product: a dome that lights up as the night runs on */
+.nav__dome{
+  position:relative;width:15px;height:17px;flex:none;overflow:hidden;
+  border-radius:999px 999px 4px 4px;
+  box-shadow:inset 0 0 0 1.4px currentColor;opacity:.85;
+}
+.nav__dome i{
+  position:absolute;left:2px;right:2px;bottom:2px;height:0;
+  border-radius:999px 999px 2px 2px;
+  background:linear-gradient(180deg,var(--glow),var(--ember));
+  transition:height .5s var(--ease);
+}
+.nav__sep{width:1px;height:18px;flex:none;background:currentColor;opacity:.16}
+.nav__links{display:none;align-items:center}
+.nav__links a{
+  position:relative;display:flex;align-items:center;padding:0 15px;
+  height:calc(var(--tile-h) - 10px);font-size:15px;opacity:.72;
+  transition:opacity .35s var(--ease);
+}
+.nav__links a::after{
+  content:"";position:absolute;left:15px;right:15px;bottom:4px;height:1px;
+  background:currentColor;transform:scaleX(0);transform-origin:50% 50%;
+  transition:transform .4s var(--ease);
+}
+.nav__links a:hover{opacity:1}
+.nav__links a:hover::after{transform:scaleX(1)}
+.nav__toggle{
+  display:flex;width:calc(var(--tile-h) - 10px);height:calc(var(--tile-h) - 10px);flex:none;
+  align-items:center;justify-content:center;border-radius:var(--pill);
+  margin-left:2px;opacity:.8;transition:opacity .3s;
+}
+.nav__toggle:hover{opacity:1}
+.nav__toggle svg{width:18px;height:18px}
+.nav__toggle .x{display:none}
+.nav__toggle.open .m{display:none}
+.nav__toggle.open .x{display:block}
+.nav__cta{
+  display:flex;height:calc(var(--tile-h) - 10px);align-items:center;flex:none;
+  margin-left:8px;padding:0 20px;border-radius:var(--pill);
+  background:var(--ember);color:#fff;font-size:14.5px;font-weight:500;
+  transition:background .35s var(--ease);
+}
+.nav__cta:hover{background:var(--ember-deep)}
+@media (min-width:880px){ .nav__links{display:flex} .nav__toggle{display:none} }
+@media (max-width:879px){
+  .nav__sep{display:none}
+  .nav__mark{padding-right:10px}
+  /* пальцем — не мышью: каждый элемент капсулы не меньше 44 px */
+  .nav__mark,.nav__cta,.nav__toggle{height:max(40px,calc(var(--tile-h) - 6px))}
+  .nav__toggle{width:max(40px,calc(var(--tile-h) - 6px))}
+  .nav{height:max(48px,var(--tile-h))}
+}
+@media (max-width:420px){
+  .nav__mark{padding:0 8px 0 10px;letter-spacing:.1em;font-size:12.5px;gap:8px}
+  .nav__cta{padding:0 15px;font-size:14px;margin-left:5px}
+}
+/* the small screen gets a sheet that drops out of the capsule */
+.sheet{
+  pointer-events:none;margin-top:8px;width:min(340px,100%);padding:6px;
+  overflow:hidden;border-radius:var(--r-m);
+  background:#191512;border:1px solid rgba(248,243,234,.14);
+  box-shadow:0 22px 50px -16px rgba(0,0,0,.8);
+  opacity:0;transform:translateY(-8px);
+  transition:opacity .45s var(--ease),transform .45s var(--ease),background .7s var(--ease),border-color .7s var(--ease);
+}
+.sheet.is-day{background:#FBF8F1;border-color:rgba(20,19,17,.09);box-shadow:0 22px 50px -18px rgba(58,38,20,.45)}
+.sheet.open{opacity:1;transform:none;pointer-events:auto}
+.sheet a{
+  display:flex;height:48px;align-items:center;padding:0 16px;
+  border-radius:var(--r-s);color:var(--linen);font-size:15.5px;
+}
+.sheet.is-day a{color:var(--ink)}
+.sheet a + a{margin-top:2px}
+.sheet a:active{background:rgba(248,243,234,.08)}
+.sheet.is-day a:active{background:rgba(20,19,17,.06)}
+@media (min-width:880px){.sheet{display:none}}
+
+/* =============================================================== HUD */
+.hud{
+  position:fixed;z-index:98;left:0;right:0;bottom:0;pointer-events:none;
+  padding:0 var(--gutter) calc(var(--sp-3) + env(safe-area-inset-bottom));
+  opacity:0;visibility:hidden;transition:opacity .8s var(--ease),visibility .8s linear;
+}
+.hud.on{opacity:1;visibility:visible}
+.hud__row{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--sp-2)}
+.hud__read{
+  display:flex;align-items:baseline;gap:14px;color:var(--linen);
+  text-shadow:0 2px 14px rgba(0,0,0,.6);
+}
+.hud__clock{font-size:clamp(30px,4.2vmin,52px);font-weight:var(--fw-head);line-height:1;letter-spacing:-.03em}
+.hud__sub{display:flex;flex-direction:column;gap:3px;font-size:var(--fz-micro);letter-spacing:0;color:rgba(248,243,234,.6)}
+.hud__sub b{font-weight:500;color:var(--apricot)}
+.hud__note{
+  max-width:24em;text-align:right;font-size:var(--fz-micro);line-height:var(--lh-body);
+  color:rgba(248,243,234,.55);font-weight:300;text-shadow:0 2px 14px rgba(0,0,0,.6);
+}
+@media (max-aspect-ratio: 1/1){ .hud__note{display:none} }
+.rail{position:relative;margin-top:var(--sp-2);height:1px;background:rgba(248,243,234,.18)}
+.rail__fill{position:absolute;left:0;top:0;height:100%;background:var(--apricot);width:0}
+.rail__ticks{position:absolute;inset:-4px 0 auto 0;display:flex;justify-content:space-between}
+.rail__ticks i{width:1px;height:9px;background:rgba(248,243,234,.3);display:block}
+.rail__labels{
+  display:flex;justify-content:space-between;margin-top:2px;
+  font-size:12.5px;letter-spacing:.01em;
+}
+.rail__labels button{
+  pointer-events:auto;min-height:44px;display:inline-flex;align-items:center;
+  padding:0 10px;margin:0 -10px;color:rgba(248,243,234,.42);
+  font-size:12.5px;letter-spacing:.01em;transition:color .3s;
+}
+.rail__labels button:first-child{margin-left:0;padding-left:0;padding-right:16px}
+.rail__labels button:last-child{margin-right:0;padding-right:0;padding-left:16px}
+.rail__labels button:hover{color:var(--apricot)}
+.rail__labels button[aria-current="true"]{color:var(--linen)}
+
+/* =============================================================== night stage */
+.night{position:relative;height:var(--night-vh)}
+.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:var(--night);isolation:isolate;
+  transform-origin:50% 0;will-change:transform;border-radius:0 0 var(--r-xl) var(--r-xl)}
+/* film texture, fixed to the stage so it never crawls while the scene moves */
+.stage::after{
+  content:"";position:absolute;inset:0;z-index:9;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:260px;
+}
+#sky{position:absolute;left:0;top:0;width:100%;height:var(--hz);z-index:0}
+
+/* Under the line: a surface, not a scene. Everything that makes the object
+   stand on it — its light pool, its reflection, its contact shadow — is
+   clipped by the line, so the foot of the lamp is exactly where they begin. */
+.surface{
+  position:absolute;left:0;right:0;top:var(--hz);bottom:0;z-index:2;overflow:hidden;
+  background:linear-gradient(180deg,#1A1A21 0%,#111218 34%,#08090C 100%);
+}
+.surface::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(90% 150% at var(--lx) 0%,rgba(0,0,0,0) 26%,rgba(0,0,0,.55) 100%);
+}
+/* at dawn the table catches the sky too */
+.surf-dawn{
+  position:absolute;inset:0;pointer-events:none;opacity:0;
+  background:linear-gradient(180deg,rgba(226,178,136,.62) 0%,rgba(150,112,88,.34) 30%,rgba(52,42,36,.12) 74%,rgba(8,9,12,0) 100%);
+}
+.pool{
+  position:absolute;left:var(--lx);top:0;width:min(150vmin,1500px);height:min(70vmin,700px);
+  transform:translate(-50%,-46%);pointer-events:none;
+  background:radial-gradient(50% 50% at 50% 50%,rgba(244,185,138,.34) 0%,rgba(217,131,90,.11) 40%,rgba(217,131,90,0) 70%);
+}
+.reflect{
+  position:absolute;left:var(--lx);top:0;
+  width:calc(var(--lampw,220px) * .82);height:calc(var(--lampw,220px) * 1.25);
+  transform:translate(-50%,0);pointer-events:none;filter:blur(10px);
+  border-radius:50% 50% 46% 46%;
+  background:linear-gradient(180deg,rgba(255,226,186,.26) 0%,rgba(255,226,186,.09) 34%,rgba(255,226,186,0) 76%);
+}
+.contact{
+  position:absolute;left:var(--lx);top:0;
+  width:calc(var(--lampw,220px) * 1.5);height:calc(var(--lampw,220px) * .3);
+  transform:translate(-50%,-46%);border-radius:50%;pointer-events:none;
+  background:radial-gradient(50% 50% at 50% 50%,rgba(0,0,0,.8) 0%,rgba(0,0,0,.4) 42%,rgba(0,0,0,0) 72%);
+}
+#dust{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none}
+
+/* the sky half, clipped exactly at the line, is where the sun lives */
+.skyclip{position:absolute;left:0;right:0;top:0;height:var(--hz);z-index:1;overflow:hidden;pointer-events:none}
+.sun{
+  position:absolute;left:50%;bottom:0;width:var(--sun-d,34vmin);height:var(--sun-d,34vmin);
+  border-radius:50%;transform:translate(-50%,100%);
+  background:radial-gradient(circle at 50% 50%,#FFF6E7 0%,#FFE0B6 38%,#F3AE75 66%,#D9835A 88%,rgba(217,131,90,0) 92%);
+  opacity:0;
+}
+/* the glow that spills across the line — lamp at night, sun at dawn */
+.halo{
+  position:absolute;left:var(--lx);top:var(--hz);width:110vw;height:60vh;z-index:3;
+  transform:translate(-50%,-50%);pointer-events:none;will-change:opacity,transform;
+}
+.halo--lamp{background:radial-gradient(38% 34% at 50% 50%,rgba(244,185,138,.42) 0%,rgba(217,131,90,.16) 38%,rgba(217,131,90,0) 68%)}
+.halo--sun{background:radial-gradient(46% 40% at 50% 50%,rgba(255,236,208,.62) 0%,rgba(244,185,138,.24) 40%,rgba(244,185,138,0) 70%);opacity:0}
+
+/* at dawn the sky turns pale, so the type gets ground to stand on */
+.typescrim{
+  position:absolute;left:0;top:0;width:min(72%,880px);height:var(--hz);z-index:4;
+  pointer-events:none;opacity:0;
+  background:linear-gradient(90deg,rgba(10,9,12,.62) 0%,rgba(10,9,12,.34) 52%,rgba(10,9,12,0) 100%);
+}
+
+/* the line itself */
+.horizon{
+  position:absolute;left:0;right:0;top:var(--hz);height:1px;z-index:5;
+  background:linear-gradient(90deg,rgba(248,243,234,0) 0%,rgba(248,243,234,.55) 14%,rgba(248,243,234,.55) 86%,rgba(248,243,234,0) 100%);
+  pointer-events:none;
+}
+
+/* =============================================================== panorama */
+.strip{position:absolute;left:0;top:0;display:flex;height:100%;will-change:transform}
+.strip--type{z-index:7;height:var(--hz);align-items:stretch}
+.pan{width:100vw;flex:none;position:relative;height:100%}
+
+/* upper band: type only */
+.pan__type{
+  position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:var(--sp-6) var(--gutter) var(--sp-4);
+  will-change:opacity,transform;
+}
+.pan--hero .pan__type{justify-content:center;padding-bottom:var(--sp-4)}
+.chip{
+  display:inline-flex;align-items:center;gap:10px;align-self:flex-start;
+  border:1px solid var(--rule-d);border-radius:999px;padding:8px 17px;margin-bottom:var(--sp-3);
+  font-size:var(--fz-label);letter-spacing:0;color:rgba(248,243,234,.84);
+  background:rgba(26,22,19,.66);
+}
+.chip i{width:5px;height:5px;border-radius:50%;background:var(--ember);flex:none}
+.pan__h{
+  font-size:var(--fz-hero);line-height:var(--lh-disp);letter-spacing:-.03em;max-width:13ch;
+  text-shadow:0 10px 40px rgba(6,4,2,.55);
+}
+.pan__h .l{display:block}
+/* letters animate one by one, but words never break apart */
+.wd{display:inline-block;white-space:nowrap}
+.pan__h .dim{opacity:.4}
+.pan__p{
+  margin-top:var(--sp-4);max-width:28rem;
+  font-size:var(--fz-lead);line-height:var(--lh-lead);font-weight:300;color:rgba(248,243,234,.82);
+  text-shadow:0 2px 14px rgba(6,4,2,.6);
+}
+/* facts sit on a soft glass panel rather than between hard rules */
+.pan__facts{
+  margin-top:var(--sp-3);display:flex;flex-direction:column;max-width:min(34rem,100%);
+  border-radius:var(--r-m);padding:2px var(--sp-3);
+  background:rgba(24,21,18,.62);border:1px solid rgba(255,255,255,.09);
+}
+.pan__facts li{
+  display:flex;align-items:baseline;justify-content:space-between;gap:var(--sp-3);
+  padding:13px 0;border-top:1px solid rgba(255,255,255,.08);font-size:var(--fz-body);
+}
+.pan__facts li:first-child{border-top:0}
+.pan__facts b{font-weight:500;color:var(--apricot);white-space:nowrap}
+.pan__facts span{color:rgba(248,243,234,.62);text-align:right}
+.hero__cta{display:flex;gap:var(--sp-1);margin-top:var(--sp-4);flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  height:52px;padding:0 var(--sp-4);border-radius:999px;font-size:17px;white-space:nowrap;
+  border:1px solid transparent;transition:transform .35s var(--ease),background .35s,border-color .35s,color .35s;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:translateY(0) scale(.985);transition-duration:.12s}
+.nav__cta:active,.plan .btn:active{transform:scale(.985)}
+.btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.btn--solid{background:var(--ember);color:#fff}
+.btn--solid:hover{background:var(--ember-deep)}
+.btn--line{border-color:rgba(248,243,234,.32);color:var(--linen)}
+.btn--line:hover{border-color:var(--linen);background:rgba(248,243,234,.06)}
+.btn--ink{background:var(--ink);color:var(--linen)}
+.btn--ink:hover{background:#2b2622}
+.btn--ghost{border-color:currentColor}
+
+/* The lamp stands on the line for the whole night. The canvas is generous and
+   the camera does the moving, so the foot stays pinned to the horizon however
+   close the tour gets. */
+.lampwrap{
+  position:absolute;left:var(--lx);top:var(--hz);z-index:6;
+  width:min(150vmin,1250px);height:min(150vmin,1250px);
+  transform:translate(-50%,-50%);pointer-events:none;
+}
+#lampCanvas{width:100%;height:100%}
+
+/* detail callouts, pinned to points on the object itself */
+.cal{
+  position:absolute;left:0;top:0;z-index:2;display:flex;align-items:center;
+  opacity:0;pointer-events:none;will-change:transform,opacity;
+}
+.cal .dot{
+  width:13px;height:13px;border-radius:50%;background:var(--apricot);flex:none;
+  box-shadow:0 0 0 9px rgba(242,194,155,.14),0 0 22px rgba(244,185,138,.92);
+}
+.cal .ln{height:1.5px;width:var(--ln,104px);flex:none;border-radius:2px;
+  background:linear-gradient(90deg,rgba(242,194,155,.92),rgba(242,194,155,.3))}
+.cal .lab{
+  display:flex;flex-direction:column;gap:5px;padding:16px 26px;border-radius:var(--r-m);
+  background:rgba(24,20,17,.9);border:1px solid rgba(255,255,255,.2);
+  box-shadow:0 24px 52px -26px rgba(0,0,0,.95),0 0 0 1px rgba(242,194,155,.07);
+}
+.cal .lab b{font-weight:500;font-size:19px;letter-spacing:-.012em;color:var(--linen);white-space:nowrap}
+.cal .lab small{font-size:15px;font-weight:300;line-height:1.35;color:rgba(248,243,234,.76);white-space:nowrap}
+.cal[data-side="l"]{flex-direction:row-reverse}
+.cal[data-side="l"] .ln{background:linear-gradient(270deg,rgba(242,194,155,.92),rgba(242,194,155,.3))}
+
+
+/* dawn floods the screen with light — the inverse of a blackout */
+.flood{
+  position:absolute;left:50%;top:var(--hz);z-index:8;width:44vmax;height:44vmax;border-radius:50%;
+  transform:translate(-50%,-50%) scale(0);pointer-events:none;
+  background:radial-gradient(circle,#FFF1DA 0%,#FFF1DA 48%,rgba(255,241,218,.86) 62%,rgba(255,241,218,.4) 74%,rgba(255,241,218,0) 84%);
+}
+/* the night does not flash away — it steps back and dims a little while the
+   day climbs over it, the same move the sections make further down */
+.stageveil{
+  position:absolute;inset:0;z-index:20;pointer-events:none;opacity:0;
+  background:#0A0A0C;
+}
+/* portrait: the lamp steps aside so the type keeps the left of the line */
+@media (max-aspect-ratio: 1/1){
+  .lampwrap{width:min(150vmin,620px);height:min(150vmin,620px)}
+  .pan__type{padding:var(--sp-6) var(--gutter) var(--sp-3)}
+  .pan__h{font-size:min(10.4vw,52px);max-width:13ch;line-height:1.02}
+  .pan__p{font-size:var(--fz-body);max-width:60%;margin-top:var(--sp-2)}
+  .pan__facts{max-width:57%;margin-top:var(--sp-2);padding:2px var(--sp-2);border-radius:var(--r-s)}
+  .pan__facts li{font-size:var(--fz-micro);padding:10px 0;gap:2px;flex-direction:column;align-items:flex-start}
+  .pan__facts span{text-align:left}
+  /* no room beside the object on a phone — the facts panel carries the detail */
+  .cal{display:none}
+  .chip{margin-bottom:var(--sp-2);font-size:11px;padding:6px 12px;letter-spacing:.1em}
+  .hero__cta{gap:var(--sp-1);margin-top:var(--sp-3)}
+  .btn{height:46px;padding:0 var(--sp-3);font-size:15px}
+  .typescrim{width:92%;background:linear-gradient(90deg,rgba(10,9,12,.72) 0%,rgba(10,9,12,.56) 56%,rgba(10,9,12,0) 100%)}
+}
+
+.ltr{display:inline-block;vertical-align:bottom;will-change:transform,filter,opacity}
+
+/* =============================================================== day */
+/* The day is pulled up by exactly one screen, so it rises over the sticky
+   night like a curtain instead of leaving an empty screen to scroll past. */
+.day{
+  position:relative;z-index:50;background:var(--paper);color:var(--ink);
+  margin-top:-100vh;margin-top:-100svh;
+  border-radius:var(--r-xl) var(--r-xl) 0 0;
+  box-shadow:0 -40px 90px -40px rgba(8,6,4,.7);
+}
+/* daylight arrives instead of starting flat: the dawn bleeds into the page */
+.day::before{
+  content:"";position:absolute;left:0;right:0;top:0;height:clamp(180px,26vw,340px);
+  pointer-events:none;border-radius:inherit;
+  background:linear-gradient(180deg,#FDF6E9 0%,rgba(250,240,222,.55) 44%,rgba(237,229,214,0) 100%);
+}
+.day > *{position:relative}
+/* the faintest paper grain: the night has a film of it, so the day gets one too */
+.day::after{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.04;
+  border-radius:inherit;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.wrap{width:min(1340px,100% - var(--gutter) * 2);margin-inline:auto}
+.sec{padding:var(--sp-7) 0}
+.sec--tight{padding-top:var(--sp-5)}
+
+/* --- the scale, straight off the reference: one face, size and opacity do
+   the work, and every gap is a step of the same 8-grid --- */
+.kicker{
+  display:flex;align-items:center;gap:var(--sp-1);
+  font-size:var(--fz-label);font-weight:400;letter-spacing:0;
+  color:#787066;margin-bottom:var(--sp-3);
+}
+.kicker::before{content:"";width:22px;height:1px;background:var(--ember)}
+.h2{font-size:var(--fz-h2);font-weight:var(--fw-head);letter-spacing:-.032em;line-height:1;text-wrap:balance}
+.h3{font-size:var(--fz-h3);font-weight:var(--fw-head);letter-spacing:-.03em;line-height:1.02}
+.lead{font-size:var(--fz-lead);font-weight:300;line-height:var(--lh-lead);color:#4A423A;max-width:28rem}
+
+/* one header shape for every section: title left, the sentence that frames
+   it right, a hairline under both */
+.sec__head{
+  display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);
+  gap:var(--sp-5);align-items:end;
+  padding-bottom:var(--sp-3);border-bottom:1px solid rgba(20,19,17,.2);
+  margin-bottom:var(--sp-5);
+}
+.sec__head .lead{padding-bottom:3px}
+@media (max-width:900px){
+  .sec__head{grid-template-columns:1fr;align-items:start;gap:var(--sp-2)}
+}
+
+[data-rv]{opacity:0;transform:translateY(24px);transition:opacity .9s var(--ease),transform 1s var(--ease)}
+[data-rv].in{opacity:1;transform:none}
+[data-rv="2"]{transition-delay:.09s}
+[data-rv="3"]{transition-delay:.18s}
+[data-rv="4"]{transition-delay:.27s}
+
+/* --- данные: три карточки из того же чернила, что и ночь. Типографика
+   та же, что у всего сайта: заголовки 500, подписи 14/1.3, число — линен,
+   а цвет несут только сами картинки чисел. --- */
+.readout{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-2);
+}
+.rd{
+  position:relative;overflow:hidden;display:flex;flex-direction:column;
+  min-height:clamp(380px,32vw,440px);
+  padding:var(--sp-4) var(--sp-4) var(--sp-3);
+  border-radius:var(--r-l);
+  background:
+    radial-gradient(120% 70% at 0% 0%,rgba(217,131,90,.16) 0%,rgba(217,131,90,0) 55%),
+    linear-gradient(180deg,#1C1916 0%,var(--ink) 60%);
+  color:var(--linen);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),inset 0 0 0 1px rgba(248,243,234,.06),
+             0 34px 70px -44px rgba(30,16,6,.7);
+  transition:transform .55s var(--ease),box-shadow .55s var(--ease);
+}
+.rd:hover{transform:translateY(-3px)}
+.rd:nth-child(2){background:radial-gradient(120% 70% at 100% 0%,rgba(217,131,90,.14) 0%,rgba(217,131,90,0) 55%),linear-gradient(180deg,#1C1916 0%,var(--ink) 60%)}
+.rd:nth-child(3){background:radial-gradient(110% 80% at 50% 110%,rgba(242,194,155,.12) 0%,rgba(242,194,155,0) 55%),linear-gradient(180deg,#1C1916 0%,var(--ink) 60%)}
+
+/* шапка карточки: номер в пилюле, подпись, справа — дельта */
+.rd__ix{
+  align-self:flex-start;display:inline-flex;align-items:center;height:26px;padding:0 10px;
+  border-radius:var(--pill);border:1px solid rgba(242,194,155,.28);
+  font-size:12px;font-weight:500;letter-spacing:.08em;color:var(--apricot);
+  font-variant-numeric:tabular-nums;
+}
+.rd__chip{
+  position:absolute;top:var(--sp-4);right:var(--sp-4);
+  display:inline-flex;align-items:center;height:26px;padding:0 11px;border-radius:var(--pill);
+  background:rgba(217,131,90,.16);color:var(--apricot);
+  font-size:13px;font-weight:500;font-variant-numeric:tabular-nums;
+}
+.readout dt{
+  margin-top:var(--sp-2);
+  font-size:var(--fz-label);font-weight:400;line-height:1.3;letter-spacing:0;
+  color:rgba(248,243,234,.62);
+}
+.readout dd{margin:0;display:flex;flex-direction:column;flex:1}
+.readout .num{
+  display:block;margin-top:var(--sp-1);
+  font-size:var(--fz-num);line-height:.95;color:var(--linen);
+}
+.readout .num .u{font-weight:400;color:var(--apricot);opacity:.9;font-size:.5em;letter-spacing:-.01em}
+.readout p{
+  margin-top:auto;padding-top:var(--sp-3);border-top:1px solid rgba(248,243,234,.09);
+  font-size:var(--fz-label);font-weight:300;line-height:1.32;
+  color:rgba(248,243,234,.58);
+}
+
+/* 01 — месяцы: столбики на оси, последний светится */
+.rd__spark{
+  display:flex;align-items:flex-end;gap:4px;height:76px;margin-top:auto;
+  padding-top:var(--sp-4);border-bottom:1px solid rgba(248,243,234,.14);
+}
+.rd__spark i{
+  flex:1;min-width:0;height:var(--h);border-radius:3px 3px 0 0;
+  background:linear-gradient(180deg,rgba(242,194,155,.78),rgba(242,194,155,.14));
+  transform:scaleY(0);transform-origin:50% 100%;
+  transition:transform .7s var(--spring);
+}
+.rd__spark i:last-child{
+  background:linear-gradient(180deg,var(--ember),rgba(217,131,90,.3));
+  box-shadow:0 0 18px rgba(217,131,90,.45);
+}
+.in .rd__spark i{transform:scaleY(1)}
+.rd__spark i:nth-child(1){transition-delay:.02s}  .rd__spark i:nth-child(2){transition-delay:.05s}
+.rd__spark i:nth-child(3){transition-delay:.08s}  .rd__spark i:nth-child(4){transition-delay:.11s}
+.rd__spark i:nth-child(5){transition-delay:.14s}  .rd__spark i:nth-child(6){transition-delay:.17s}
+.rd__spark i:nth-child(7){transition-delay:.20s}  .rd__spark i:nth-child(8){transition-delay:.23s}
+.rd__spark i:nth-child(9){transition-delay:.26s}  .rd__spark i:nth-child(10){transition-delay:.29s}
+.rd__spark i:nth-child(11){transition-delay:.32s} .rd__spark i:nth-child(12){transition-delay:.35s}
+.rd__spark i:nth-child(13){transition-delay:.38s} .rd__spark i:nth-child(14){transition-delay:.41s}
+.rd__spark i:nth-child(15){transition-delay:.44s}
+.rd__axis{
+  display:flex;justify-content:space-between;margin-top:8px;
+  font-size:12px;line-height:1.3;color:rgba(248,243,234,.4);font-variant-numeric:tabular-nums;
+}
+.rd__axis span:last-child{color:var(--apricot)}
+
+/* 02 — две дорожки: было и стало */
+.rd__pair{display:flex;flex-direction:column;gap:var(--sp-3);margin-top:auto;padding-top:var(--sp-4)}
+.rd__bar{display:flex;flex-direction:column-reverse;gap:9px}
+.rd__bar i{
+  display:block;position:relative;height:10px;width:100%;border-radius:999px;
+  background:rgba(248,243,234,.07);overflow:hidden;
+}
+.rd__bar i::after{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:var(--w);border-radius:inherit;
+  background:rgba(248,243,234,.32);
+  transform:scaleX(0);transform-origin:0 50%;transition:transform .9s var(--ease) .1s;
+}
+.rd__bar--now i::after{background:linear-gradient(90deg,var(--ember),var(--apricot));transition-delay:.32s;box-shadow:0 0 14px rgba(217,131,90,.5)}
+.in .rd__bar i::after{transform:scaleX(1)}
+.rd__bar em{
+  display:flex;justify-content:space-between;align-items:baseline;gap:var(--sp-2);
+  font-style:normal;font-size:13px;line-height:1.3;color:rgba(248,243,234,.5);
+}
+.rd__bar b{font-weight:500;color:rgba(248,243,234,.85);font-variant-numeric:tabular-nums}
+.rd__bar--now b{color:var(--apricot)}
+
+/* 03 — сто ночей, семьдесят одна без будильника */
+.rd__dots{
+  display:grid;grid-template-columns:repeat(20,1fr);gap:4px;
+  margin-top:auto;padding-top:var(--sp-4);
+}
+.rd__dots i{
+  aspect-ratio:1;border-radius:50%;background:var(--apricot);
+  opacity:0;transform:scale(.4);
+  transition:opacity .45s var(--ease),transform .5s var(--spring);
+}
+.rd__dots i.off{background:rgba(248,243,234,.14)}
+.in .rd__dots i{opacity:1;transform:none}
+.rd__dots i:nth-child(20n+1),.rd__dots i:nth-child(20n+2){transition-delay:.04s}
+.rd__dots i:nth-child(20n+3),.rd__dots i:nth-child(20n+4){transition-delay:.08s}
+.rd__dots i:nth-child(20n+5),.rd__dots i:nth-child(20n+6){transition-delay:.12s}
+.rd__dots i:nth-child(20n+7),.rd__dots i:nth-child(20n+8){transition-delay:.16s}
+.rd__dots i:nth-child(20n+9),.rd__dots i:nth-child(20n+10){transition-delay:.20s}
+.rd__dots i:nth-child(20n+11),.rd__dots i:nth-child(20n+12){transition-delay:.24s}
+.rd__dots i:nth-child(20n+13),.rd__dots i:nth-child(20n+14){transition-delay:.28s}
+.rd__dots i:nth-child(20n+15),.rd__dots i:nth-child(20n+16){transition-delay:.32s}
+.rd__dots i:nth-child(20n+17),.rd__dots i:nth-child(20n+18){transition-delay:.36s}
+.rd__dots i:nth-child(20n+19),.rd__dots i:nth-child(20n){transition-delay:.40s}
+.rd__legend{
+  display:flex;gap:var(--sp-2);flex-wrap:wrap;margin-top:10px;
+  font-size:12px;line-height:1.3;color:rgba(248,243,234,.5);
+}
+.rd__legend span{display:inline-flex;align-items:center;gap:6px}
+.rd__legend i{width:7px;height:7px;border-radius:50%;background:var(--apricot)}
+.rd__legend i.off{background:rgba(248,243,234,.22)}
+
+@media (max-width:980px) and (min-width:861px){ .rd{padding:var(--sp-3)} .rd__chip{top:var(--sp-3);right:var(--sp-3)} }
+@media (max-width:860px){
+  .readout{grid-template-columns:1fr;gap:12px}
+  .rd{min-height:0;padding:var(--sp-3)}
+  .rd__chip{top:var(--sp-3);right:var(--sp-3)}
+  .rd__spark{height:60px;gap:3px}
+}
+
+/* =============================================================== the stack
+   Лампа, тарифы и отзывы складываются стопкой: каждая карта залипает у
+   верхнего края, а следующая наезжает поверх, слегка отодвигая предыдущую. */
+.stack{position:relative}
+.stack__card{
+  position:sticky;top:0;
+  display:grid;align-content:center;
+  min-height:100svh;padding:var(--sp-5) 0;
+  border-radius:var(--r-xl) var(--r-xl) 0 0;
+  transform-origin:50% 0;will-change:transform;
+  background:var(--paper);
+}
+.stack__card:nth-child(2){background:#F4EDE1}
+.stack__card:nth-child(3){background:var(--card)}
+.stack__card + .stack__card{box-shadow:0 -26px 64px -30px rgba(30,16,6,.5)}
+/* the veil is what dims a card as the next one covers it — one node, one
+   opacity write per frame, so nothing below it is ever re-styled */
+.stack__veil{
+  position:absolute;inset:0;z-index:5;pointer-events:none;opacity:0;
+  border-radius:inherit;background:var(--paper);
+}
+@media (max-height:860px){ .stack__card{padding:var(--sp-4) 0} }
+@media (max-height:760px){ .stack__card{padding:var(--sp-3) 0} }
+
+/* на узком экране стопка превращается в обычную ленту — иначе длинный
+   контент карточки оказывается под следующей */
+@media (max-width:900px){
+  .stack__card{
+    position:static;min-height:0;padding:var(--sp-6) 0;
+    border-radius:0;box-shadow:none;transform:none !important;
+  }
+  .stack__veil{display:none}
+}
+
+/* --- продукт: витрина одним объектом, фотография во всю левую половину --- */
+.pcard{
+  display:grid;grid-template-columns:minmax(0,.96fr) minmax(0,1fr);align-items:stretch;
+  overflow:hidden;border-radius:clamp(30px,3.6vw,56px);
+  background:var(--card);box-shadow:var(--soft-2);
+}
+.stack__card:nth-child(1) .pcard{background:var(--card)}
+.shot{
+  position:relative;overflow:hidden;background:#E3D7C5;
+  min-height:min(52svh,520px);
+}
+.shot img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  filter:saturate(1.06) contrast(1.05);
+}
+.shot::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(78% 64% at 50% 40%,rgba(0,0,0,0) 40%,rgba(52,34,18,.3) 100%);
+}
+.shot__cap{
+  position:absolute;right:var(--sp-3);bottom:var(--sp-3);z-index:2;
+  font-size:var(--fz-micro);font-weight:300;letter-spacing:0;color:rgba(248,243,234,.9);
+  background:rgba(16,15,13,.72);border:1px solid rgba(255,255,255,.16);
+  border-radius:var(--pill);padding:9px 17px;
+  opacity:0;transform:translateY(6px);transition:opacity .7s var(--ease) .3s,transform .7s var(--ease) .3s;
+}
+.shot.in .shot__cap{opacity:1;transform:none}
+.pcard__body{
+  display:flex;flex-direction:column;justify-content:center;
+  padding:var(--sp-4) var(--sp-5);
+}
+.pcard__h{font-size:var(--fz-h2);margin-bottom:var(--sp-2)}
+.pcard__lead{
+  font-size:var(--fz-lead);font-weight:300;line-height:var(--lh-lead);
+  color:#4A423A;max-width:28rem;margin-bottom:var(--sp-3);
+}
+.pcard__foot{
+  display:flex;align-items:center;gap:var(--sp-3);flex-wrap:wrap;
+  margin-top:auto;padding-top:var(--sp-3);
+}
+@media (max-width:900px){
+  .pcard{grid-template-columns:1fr}
+  .shot{min-height:0;aspect-ratio:1/0.88}
+  .pcard__body{padding:var(--sp-4)}
+}
+/* dark pills read on a pale photograph; the white ones vanished into it */
+.co{
+  position:absolute;display:flex;align-items:center;gap:10px;z-index:2;
+  font-size:var(--fz-body);letter-spacing:-.005em;color:var(--linen);
+  background:rgba(16,15,13,.88);border:1px solid rgba(255,255,255,.2);
+  border-radius:999px;padding:11px 20px 11px 13px;white-space:nowrap;
+  box-shadow:0 16px 34px -18px rgba(0,0,0,.9);
+  opacity:0;transform:translateY(6px);transition:opacity .6s var(--ease),transform .6s var(--ease);
+}
+.shot.in .co{opacity:1;transform:none}
+.shot.in .co:nth-of-type(2){transition-delay:.12s}
+.shot.in .co:nth-of-type(3){transition-delay:.24s}
+.co i{width:9px;height:9px;border-radius:50%;background:var(--ember);flex:none;box-shadow:0 0 0 5px rgba(217,131,90,.26)}
+.co--a{left:7%;top:31%}
+.co--b{right:4%;top:52%}
+.co--c{left:10%;bottom:11%}
+/* узкий экран: подписи расходятся по высоте, чтобы не наезжать друг на друга */
+@media (max-width:760px){
+  .co{font-size:var(--fz-micro);padding:9px 16px 9px 11px;gap:9px}
+  .co i{width:8px;height:8px;box-shadow:0 0 0 4px rgba(217,131,90,.26)}
+  .co--a{left:5%;top:11%}
+  .co--b{left:auto;right:5%;top:39%}
+  .co--c{left:5%;bottom:23%}
+  .shot__cap{right:5%;bottom:5%;font-size:12.5px;padding:8px 14px}
+}
+
+/* характеристики — волосяные линии, без второй карточки внутри карточки */
+.specs{border-top:1px solid rgba(20,19,17,.22)}
+.specs li{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--sp-3);align-items:baseline;
+  padding:13px 0;border-bottom:1px solid rgba(20,19,17,.11);
+}
+.specs li span:first-child{font-size:var(--fz-body);font-weight:400;color:#8A8078;letter-spacing:0}
+.specs li span:last-child{font-size:var(--fz-lead);font-weight:400;text-align:right;font-variant-numeric:tabular-nums}
+.prod__from{font-size:var(--fz-body);color:var(--ash);display:inline-flex;align-items:baseline;gap:var(--sp-1)}
+.prod__from b{font-weight:var(--fw-head);font-size:var(--fz-h3);letter-spacing:-.03em;color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* --- тарифы: three soft cards, one inked --- */
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-2);align-items:stretch}
+.plan{
+  display:flex;flex-direction:column;gap:var(--sp-2);position:relative;overflow:hidden;
+  padding:var(--sp-4) var(--sp-4) var(--sp-4);
+  border-radius:var(--r-xl);background:var(--card);box-shadow:var(--soft-1);
+  transition:transform .55s var(--ease),box-shadow .55s var(--ease);
+}
+.stack__card:nth-child(2) .plan{background:var(--card)}
+.plan:hover{transform:translateY(-4px);box-shadow:var(--soft-2)}
+.plan__name{font-size:var(--fz-h3);font-weight:var(--fw-head);letter-spacing:-.03em;line-height:1}
+.plan__d{font-size:var(--fz-body);font-weight:300;line-height:var(--lh-body);color:var(--ash);min-height:3em}
+.plan__price{
+  font-weight:var(--fw-head);letter-spacing:-.035em;font-variant-numeric:tabular-nums;
+  font-size:clamp(32px,3vw,46px);line-height:1;
+  padding-top:var(--sp-2);border-top:1px solid rgba(20,19,17,.12);
+}
+.plan__price small{font-weight:300;font-size:.46em;margin-left:.14em;opacity:.55}
+.plan--hi .plan__price{border-top-color:rgba(248,243,234,.14)}
+.plan__inc{font-size:var(--fz-micro);letter-spacing:.06em;text-transform:uppercase;color:var(--ash);margin-top:var(--sp-1)}
+.plan--hi .plan__inc{color:rgba(248,243,234,.45)}
+.plan ul{display:flex;flex-direction:column;gap:var(--sp-1);flex:1;margin-top:-4px}
+.plan ul li{position:relative;padding-left:20px;font-size:var(--fz-body);line-height:var(--lh-body)}
+.plan ul li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:1px;background:var(--ember)}
+.plan .btn{width:100%;margin-top:var(--sp-1);height:48px}
+.plan--hi{background:var(--ink) !important;color:var(--linen);box-shadow:0 40px 80px -44px rgba(30,16,6,.72)}
+.plan--hi::before{
+  content:"";position:absolute;right:-30%;top:-40%;width:90%;aspect-ratio:1;pointer-events:none;
+  background:radial-gradient(50% 50% at 50% 50%,rgba(217,131,90,.22) 0%,rgba(217,131,90,.06) 46%,rgba(217,131,90,0) 72%);
+}
+.plan--hi .plan__d{color:rgba(248,243,234,.6)}
+.plan--hi ul li::before{background:var(--apricot)}
+.plan__tag{
+  position:absolute;top:var(--sp-4);right:var(--sp-4);
+  background:var(--ember);color:#fff;border-radius:var(--pill);
+  font-size:var(--fz-micro);letter-spacing:0;padding:6px 14px;
+}
+.plans__note{margin-top:var(--sp-3);font-size:var(--fz-body);font-weight:300;color:var(--ash);max-width:56ch}
+@media (max-width:900px){ .plans{grid-template-columns:1fr} }
+
+/* --- отзывы: оценка, одна большая цитата и три карточки с короткими --- */
+.stars{display:inline-flex;gap:3px;color:var(--ember)}
+.stars svg{width:14px;height:14px;fill:currentColor}
+.stars--lg svg{width:18px;height:18px}
+.revs{
+  display:grid;grid-template-columns:minmax(0,.52fr) minmax(0,1.48fr);
+  gap:var(--sp-5);align-items:start;
+}
+.revs__score{
+  display:flex;flex-direction:column;align-items:flex-start;
+  padding:var(--sp-4);border-radius:var(--r-l);background:var(--paper);
+  box-shadow:inset 0 0 0 1px rgba(20,19,17,.05);
+}
+.revs__score .kicker{margin-bottom:var(--sp-2)}
+.revs__score .num{display:block;font-size:var(--fz-num);line-height:.92;color:var(--ink)}
+.revs__score .stars{margin-top:var(--sp-2)}
+.revs__score p{
+  margin-top:var(--sp-3);padding-top:var(--sp-2);border-top:1px solid rgba(20,19,17,.1);
+  font-size:var(--fz-label);font-weight:300;line-height:1.32;color:#6F665D;
+}
+.revs__lead{
+  position:relative;margin:0;display:grid;grid-template-columns:minmax(0,1fr) auto;
+  gap:var(--sp-5);align-items:end;padding-top:var(--sp-5);
+}
+.revs__lead blockquote::before{
+  content:"\201C";position:absolute;left:-.04em;top:-.62em;z-index:-1;pointer-events:none;
+  font-size:3.4em;line-height:1;font-weight:700;color:var(--ember);opacity:.2;
+}
+.revs__lead blockquote{
+  position:relative;z-index:1;margin:0;font-weight:var(--fw-head);letter-spacing:-.03em;
+  font-size:clamp(26px,3vw,46px);line-height:1.04;max-width:21ch;text-wrap:balance;
+}
+.revs__lead blockquote b{font-weight:700}
+.revs__lead figcaption{
+  display:flex;flex-direction:column;align-items:flex-start;gap:var(--sp-2);
+  width:clamp(150px,13vw,186px);padding-bottom:4px;
+}
+.revs__face{
+  width:100%;aspect-ratio:1/1.12;flex:none;overflow:hidden;
+  border-radius:999px 999px var(--r-s) var(--r-s);background:#D9C6B2;
+  box-shadow:var(--soft-1);
+}
+.revs__face img{width:100%;height:100%;object-fit:cover}
+.revs__who{display:flex;flex-direction:column;gap:3px}
+.revs__who b{font-weight:500;font-size:var(--fz-body);letter-spacing:0;line-height:1.25}
+.revs__who small{font-size:var(--fz-micro);font-weight:300;line-height:1.3;color:var(--ash)}
+
+.revs__more{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:var(--sp-2);margin-top:var(--sp-5);
+}
+.rv{
+  display:flex;flex-direction:column;gap:var(--sp-2);
+  padding:var(--sp-3) var(--sp-3) var(--sp-3);border-radius:var(--r-l);
+  background:var(--paper);box-shadow:inset 0 0 0 1px rgba(20,19,17,.05);
+  transition:transform .5s var(--ease),box-shadow .5s var(--ease);
+}
+.rv:hover{transform:translateY(-3px);box-shadow:inset 0 0 0 1px rgba(20,19,17,.05),var(--soft-1)}
+.rv p{font-size:var(--fz-lead);font-weight:300;line-height:1.34;color:#3E372F}
+.rv__who{display:flex;align-items:center;gap:12px;margin-top:auto;padding-top:var(--sp-2);border-top:1px solid rgba(20,19,17,.09)}
+.rv__who > span{display:flex;flex-direction:column;gap:2px}
+.rv__who b{font-weight:500;font-size:var(--fz-label);line-height:1.25}
+.rv__who small{font-size:12.5px;font-weight:300;line-height:1.3;color:var(--ash)}
+.rv__ava{
+  width:40px;height:40px;flex:none;border-radius:50%;display:grid;place-items:center;
+  background:var(--ink);color:var(--apricot);font-style:normal;font-size:13px;font-weight:500;letter-spacing:.02em;
+}
+@media (max-width:900px){
+  .revs{grid-template-columns:1fr;gap:var(--sp-3)}
+  .revs__score{flex-direction:row;flex-wrap:wrap;align-items:center;gap:6px 14px;padding:var(--sp-3)}
+  .revs__score .kicker{width:100%;margin-bottom:0}
+  .revs__score .stars{margin-top:0}
+  .revs__score p{width:100%;margin-top:4px}
+  .revs__lead{grid-template-columns:1fr;gap:var(--sp-3);align-items:start;padding-top:var(--sp-4)}
+  .revs__lead blockquote{max-width:none}
+  .revs__lead figcaption{flex-direction:row;align-items:center;width:auto;gap:var(--sp-2)}
+  .revs__face{width:clamp(64px,18vw,84px)}
+  .revs__more{grid-template-columns:1fr;gap:12px;margin-top:var(--sp-4)}
+}
+
+/* --- финал: ночь возвращается --- */
+.end{
+  position:relative;z-index:50;background:var(--night);color:var(--linen);overflow:hidden;
+  border-radius:var(--r-xl) var(--r-xl) 0 0;margin-top:var(--sp-5);
+}
+.end__sky{position:relative;height:clamp(180px,26vh,280px);overflow:hidden}
+.end__sun{
+  position:absolute;left:50%;bottom:0;width:30vmin;height:30vmin;border-radius:50%;
+  transform:translate(-50%,42%);
+  box-shadow:0 0 60px 18px rgba(243,174,117,.28),0 0 160px 60px rgba(217,131,90,.14);
+  background:radial-gradient(circle,#FFF6E7 0%,#FFE0B6 38%,#F3AE75 62%,rgba(226,147,101,.45) 72%,rgba(217,131,90,0) 84%);
+  opacity:.92;
+}
+.end__line{position:absolute;left:0;right:0;bottom:0;height:1px;
+  background:linear-gradient(90deg,rgba(248,243,234,0),rgba(248,243,234,.5) 16%,rgba(248,243,234,.5) 84%,rgba(248,243,234,0))}
+.end__cta{display:flex;flex-direction:column;align-items:center;text-align:center;gap:var(--sp-3);padding:var(--sp-6) 0 var(--sp-7)}
+.end__cta .h2{max-width:15ch}
+.form{display:flex;gap:var(--sp-1);width:min(520px,100%);flex-wrap:wrap}
+.form input{
+  flex:1;min-width:200px;height:50px;padding:0 22px;border-radius:999px;
+  background:rgba(248,243,234,.07);border:1px solid var(--rule-d);color:var(--linen);
+  transition:border-color .3s,background .3s;
+}
+.form input::placeholder{color:rgba(248,243,234,.42)}
+.form input:focus{outline:none;border-color:var(--apricot);background:rgba(248,243,234,.12);box-shadow:0 0 0 4px rgba(242,194,155,.14)}
+@media (max-width:640px){
+  .form{flex-direction:column;gap:var(--sp-2)}
+  .form input{flex:none;width:100%;min-width:0;height:52px}
+  .form .btn{width:100%}
+}
+.form__ok{font-size:var(--fz-label);color:var(--apricot);min-height:1.2em;opacity:0;transition:opacity .4s}
+.form__ok.on{opacity:1}
+.end__note{font-size:var(--fz-micro);color:rgba(248,243,234,.42);max-width:36ch}
+.foot{
+  display:grid;grid-template-columns:1.7fr repeat(3,1fr);gap:var(--sp-4);
+  padding:var(--sp-5) 0;border-top:1px solid var(--rule-d);
+}
+.wordmark{display:inline-flex;align-items:center;gap:10px;font-size:var(--fz-label);font-weight:500;letter-spacing:.14em}
+.wordmark svg{width:18px;height:18px}
+.foot h4{font-size:var(--fz-label);letter-spacing:0;color:rgba(248,243,234,.45);font-weight:400;margin-bottom:var(--sp-2)}
+.foot a{display:flex;align-items:center;min-height:36px;font-size:var(--fz-body);color:rgba(248,243,234,.78);transition:color .3s}
+@media (max-width:900px){ .foot a{min-height:44px} }
+.foot a:hover{color:var(--apricot)}
+.foot__brand p{margin-top:var(--sp-2);font-size:var(--fz-body);font-weight:300;line-height:var(--lh-body);color:rgba(248,243,234,.5);max-width:28ch}
+.foot__bottom{
+  display:flex;justify-content:space-between;gap:var(--sp-3);flex-wrap:wrap;
+  padding:var(--sp-3) 0 calc(var(--sp-4) + env(safe-area-inset-bottom));
+  border-top:1px solid var(--rule-d);
+  font-size:var(--fz-micro);color:rgba(248,243,234,.42);
+}
+@media (max-width:900px){.foot{grid-template-columns:1fr 1fr}.foot__brand{grid-column:1/-1}}
+
+
+/* --- финал: две кнопки вместо поля почты --- */
+.end__buy{display:flex;gap:var(--sp-1);flex-wrap:wrap;justify-content:center}
+@media (max-width:640px){ .end__buy{flex-direction:column;align-self:stretch} .end__buy .btn{width:100%} }
+.foot__txt{display:flex;align-items:center;min-height:36px;font-size:var(--fz-body);color:rgba(248,243,234,.45)}
+.foot__bottom span:first-child{max-width:62ch}
+
+/* ============================================================ checkout
+   A real-looking order sheet that never sends anything: centred on a
+   desktop, a bottom sheet on a phone. */
+.ck{position:fixed;inset:0;z-index:300;display:grid;place-items:center;padding:var(--sp-3)}
+.ck[hidden]{display:none}
+.ck__scrim{
+  position:absolute;inset:0;background:rgba(10,9,8,.58);
+  opacity:0;transition:opacity .32s var(--ease);
+}
+.ck.is-open .ck__scrim{opacity:1}
+.ck__sheet{
+  position:relative;width:min(560px,100%);max-height:min(92svh,860px);overflow:auto;
+  overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+  padding:var(--sp-4);border-radius:var(--r-xl);
+  background:var(--card);color:var(--ink);
+  box-shadow:0 40px 100px -30px rgba(0,0,0,.6);
+  opacity:0;transform:translateY(18px) scale(.985);
+  transition:opacity .32s var(--ease),transform .42s var(--spring);
+}
+.ck.is-open .ck__sheet{opacity:1;transform:none}
+.ck__x{
+  position:absolute;top:14px;right:14px;width:44px;height:44px;border-radius:50%;
+  display:grid;place-items:center;color:var(--ink);background:rgba(20,19,17,.05);
+  transition:background .25s;
+}
+.ck__x:hover{background:rgba(20,19,17,.1)}
+.ck__x svg{width:18px;height:18px}
+.ck__title{font-size:var(--fz-h3);line-height:1;margin-bottom:var(--sp-3)}
+.ck__form{display:flex;flex-direction:column;gap:var(--sp-3)}
+.ck fieldset{border:0;margin:0;padding:0;min-width:0}
+.ck__label,.ck__field label{
+  display:block;margin-bottom:var(--sp-1);
+  font-size:var(--fz-micro);font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--ash);
+}
+.ck__plans{display:flex;flex-direction:column;gap:8px}
+.ck__plan{
+  position:relative;display:flex;align-items:center;gap:var(--sp-2);cursor:pointer;
+  min-height:60px;padding:12px 16px 12px 44px;border-radius:var(--r-s);
+  background:var(--paper);box-shadow:inset 0 0 0 1px rgba(20,19,17,.07);
+  transition:box-shadow .25s var(--ease),background .25s var(--ease);
+}
+.ck__plan::before{
+  content:"";position:absolute;left:16px;top:50%;width:16px;height:16px;margin-top:-8px;border-radius:50%;
+  box-shadow:inset 0 0 0 1.5px rgba(20,19,17,.3);background:var(--card);transition:box-shadow .25s var(--ease);
+}
+.ck__plan:has(input:checked){background:#FFF8EE;box-shadow:inset 0 0 0 1.5px var(--ember)}
+.ck__plan:has(input:checked)::before{box-shadow:inset 0 0 0 5px var(--ember)}
+.ck__plan:has(input:focus-visible){outline:2px solid var(--ember);outline-offset:2px}
+.ck__plan input,.ck__seg input{position:absolute;opacity:0;pointer-events:none}
+.ck__plan-t{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.ck__plan-t b{font-weight:500;font-size:var(--fz-lead);line-height:1.2}
+.ck__plan-t small{font-size:13px;line-height:1.3;color:var(--ash)}
+.ck__plan em{font-style:normal;font-weight:500;font-size:var(--fz-lead);font-variant-numeric:tabular-nums;white-space:nowrap}
+.ck__grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-2)}
+.ck__field input{
+  width:100%;height:50px;padding:0 16px;border-radius:var(--r-xs);
+  font-size:16px;color:var(--ink);background:var(--paper);
+  border:1px solid rgba(20,19,17,.1);transition:border-color .2s,box-shadow .2s;
+}
+.ck__field input:focus{outline:none;border-color:var(--ember);box-shadow:0 0 0 4px rgba(217,131,90,.16)}
+.ck__field input[aria-invalid="true"]{border-color:#C0492F}
+.ck__err{display:block;min-height:1.3em;margin-top:6px;font-size:13px;line-height:1.3;color:#B2402A}
+.ck__seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ck__seg legend{grid-column:1/-1}
+.ck__seg label{position:relative;cursor:pointer}
+.ck__seg span{
+  display:flex;flex-direction:column;justify-content:center;gap:3px;min-height:60px;padding:10px 14px;
+  border-radius:var(--r-s);background:var(--paper);box-shadow:inset 0 0 0 1px rgba(20,19,17,.07);
+  font-size:var(--fz-label);line-height:1.25;transition:box-shadow .25s var(--ease),background .25s;
+}
+.ck__seg b{font-weight:500;font-size:13px;color:var(--ash)}
+.ck__seg input:checked + span{background:#FFF8EE;box-shadow:inset 0 0 0 1.5px var(--ember)}
+.ck__seg input:focus-visible + span{outline:2px solid var(--ember);outline-offset:2px}
+.ck__sum{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding-top:var(--sp-2);border-top:1px solid rgba(20,19,17,.12);
+  font-size:var(--fz-body);color:var(--ash);
+}
+.ck__sum b{font-weight:500;font-size:var(--fz-h3);letter-spacing:-.03em;color:var(--ink);font-variant-numeric:tabular-nums}
+.ck__submit{width:100%}
+.ck__submit[aria-busy="true"]{opacity:.7;pointer-events:none}
+.ck__demo{font-size:12.5px;line-height:1.35;color:var(--ash);text-align:center}
+.ck__done{display:flex;flex-direction:column;align-items:flex-start;gap:var(--sp-2);padding-top:var(--sp-2)}
+.ck__done p{font-size:var(--fz-lead);line-height:1.34;color:#4A423A}
+.ck__done-row{display:flex;gap:var(--sp-1);flex-wrap:wrap;margin-top:var(--sp-1)}
+.ck__dome{position:relative;width:44px;height:50px;border-radius:999px 999px 10px 10px;box-shadow:inset 0 0 0 2px var(--ink);overflow:hidden;margin-bottom:var(--sp-1)}
+.ck__dome i{position:absolute;left:4px;right:4px;bottom:4px;height:0;border-radius:999px 999px 6px 6px;background:linear-gradient(180deg,var(--glow),var(--ember));transition:height 1.2s var(--ease) .15s}
+.ck__done.is-in .ck__dome i{height:calc(100% - 8px)}
+html.co-lock,html.co-lock body{overflow:hidden}
+@media (max-width:640px){
+  .ck{padding:0;place-items:end stretch}
+  .ck__sheet{
+    width:100%;max-height:94svh;border-radius:var(--r-l) var(--r-l) 0 0;
+    padding:var(--sp-4) var(--gutter) calc(var(--sp-3) + env(safe-area-inset-bottom));
+    transform:translateY(40px);
+  }
+  .ck__grid{grid-template-columns:1fr;gap:0}
+  .ck__done-row{flex-direction:column;align-self:stretch}
+  .ck__done-row .btn{width:100%}
+}
+@media (prefers-reduced-motion: reduce){ .ck__sheet,.ck__scrim{transition:none} }
+
+@media (prefers-reduced-motion: reduce){
+  .grain{display:none}
+  [data-rv]{opacity:1;transform:none;transition:none}
+  .shot .co,.shot .shot__cap{opacity:1;transform:none;transition:none}
+  .btn:hover{transform:none}
+  .stack__card{transform:none !important}
+  .stack__veil{display:none}
+}
+
+/* If the module never arrives (a blocked CDN, a dead network), the page still
+   has to be a page: after nine seconds the loader steps aside and everything
+   that JS would have revealed is simply shown. The same rules serve no-JS. */
+html.fallback .ldr{display:none}
+html.fallback .bar{opacity:1;transform:none}
+html.fallback [data-rv]{opacity:1;transform:none;transition:none}
+html.fallback .shot .co,html.fallback .shot .shot__cap{opacity:1;transform:none}
+html.fallback .rd__spark i{transform:none}
+html.fallback .rd__bar i::after{transform:none}
+html.fallback .rd__dots i{opacity:1;transform:none}
+html.fallback .hud{display:none}
+html.fallback .cal{display:none}
+/* and the night is one screen, not eight — there is no timeline to scroll */
+html.fallback .night{height:auto}
+html.fallback .stage{position:relative}
+html.fallback .day{margin-top:0}
+html.fallback .pan:not(:first-child){display:none}
+</style>
+<noscript><style>
+.ldr{display:none}.bar{opacity:1;transform:none}[data-rv]{opacity:1;transform:none}
+.shot .co,.shot .shot__cap{opacity:1;transform:none}.rd__spark i{transform:none}
+.rd__bar i::after{transform:none}.rd__dots i{opacity:1;transform:none}.hud,.cal{display:none}
+.night{height:auto}.stage{position:relative}.day{margin-top:0}.pan:not(:first-child){display:none}
+</style></noscript>
+<script>
+(function(){
+  var t = setTimeout(function(){ document.documentElement.classList.add('fallback'); }, 9000);
+  window.__zariaReady = function(){ clearTimeout(t); };
+})();
+</script>
+</head>
+<body>
+
+<!-- ============================================== loader: the mark draws itself -->
+<div class="ldr" id="ldr" aria-hidden="true">
+  <div class="ldr__clip"><div class="ldr__disc" id="ldrDisc"></div></div>
+  <div class="ldr__line" id="ldrLine"></div>
+  <div class="ldr__word" id="ldrWord">Zaria</div>
+  <div class="ldr__k mono" id="ldrK">1800 K</div>
+</div>
+
+<!-- ============================================== chrome -->
+<header class="bar" id="bar">
+  <nav class="nav" id="nav" aria-label="Разделы">
+    <a class="nav__mark" href="#top" aria-label="ZARIA, наверх">
+      <span class="nav__dome" aria-hidden="true"><i id="navFill"></i></span>
+      ZARIA
+    </a>
+    <span class="nav__sep" aria-hidden="true"></span>
+    <span class="nav__links">
+      <a href="#lamp">Лампа</a>
+      <a href="#data">Данные</a>
+      <a href="#plans">Тарифы</a>
+      <a href="#review">Отзывы</a>
+    </span>
+    <button type="button" class="nav__toggle" id="burger" aria-label="Меню" aria-expanded="false">
+      <svg class="m" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg>
+      <svg class="x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>
+    </button>
+    <a class="nav__cta" href="#order" data-buy>Заказать</a>
+  </nav>
+
+  <div class="sheet" id="sheet">
+    <a href="#lamp">Лампа</a>
+    <a href="#data">Данные</a>
+    <a href="#plans">Тарифы</a>
+    <a href="#review">Отзывы</a>
+  </div>
+</header>
+
+
+<!-- ============================================== checkout (demo: nothing leaves the browser) -->
+<div class="ck" id="checkout" hidden>
+  <div class="ck__scrim" data-close></div>
+  <div class="ck__sheet" role="dialog" aria-modal="true" aria-labelledby="coTitle" data-lenis-prevent>
+    <button type="button" class="ck__x" data-close aria-label="Закрыть"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+
+    <div class="ck__step" id="coStepForm">
+      <span class="kicker">Оформление заказа</span>
+      <h2 class="ck__title disp" id="coTitle">Ваша ZARIA One</h2>
+      <form class="ck__form" id="coForm" novalidate autocomplete="off">
+        <fieldset class="ck__plans">
+          <legend class="ck__label">Тариф</legend>
+          <label class="ck__plan"><input type="radio" name="plan" value="start" data-price="14900"><span class="ck__plan-t"><b>Старт</b><small>Лампа и базовое приложение</small></span><em>14 900 ₽</em></label>
+          <label class="ck__plan"><input type="radio" name="plan" value="protocol" data-price="19900" checked><span class="ck__plan-t"><b>Протокол</b><small>Лампа и год персонального графика</small></span><em>19 900 ₽</em></label>
+          <label class="ck__plan"><input type="radio" name="plan" value="pair" data-price="34900"><span class="ck__plan-t"><b>Пара</b><small>Две лампы, два профиля</small></span><em>34 900 ₽</em></label>
+        </fieldset>
+
+        <div class="ck__grid">
+          <div class="ck__field">
+            <label for="coName">Имя</label>
+            <input id="coName" name="name" type="text" autocomplete="off" required>
+            <small class="ck__err" id="coNameErr" aria-live="polite"></small>
+          </div>
+          <div class="ck__field">
+            <label for="coContact">Телефон или почта</label>
+            <input id="coContact" name="contact" type="text" inputmode="email" autocomplete="off" required>
+            <small class="ck__err" id="coContactErr" aria-live="polite"></small>
+          </div>
+        </div>
+
+        <fieldset class="ck__seg">
+          <legend class="ck__label">Доставка</legend>
+          <label><input type="radio" name="ship" value="courier" data-price="490" checked><span>Курьер, 1–2 дня<b>490 ₽</b></span></label>
+          <label><input type="radio" name="ship" value="pickup" data-price="0"><span>Пункт выдачи<b>бесплатно</b></span></label>
+        </fieldset>
+
+        <div class="ck__sum"><span>Итого</span><b id="coTotal">20 390 ₽</b></div>
+        <button class="btn btn--solid ck__submit" type="submit">Оформить заказ</button>
+        <p class="ck__demo">Это демо-магазин концепт-кейса. Заказ не создаётся, а введённые данные никуда не отправляются и не сохраняются — они остаются только в этом окне и стираются при закрытии.</p>
+      </form>
+    </div>
+
+    <div class="ck__step ck__done" id="coStepDone" hidden>
+      <span class="ck__dome" aria-hidden="true"><i></i></span>
+      <h2 class="ck__title disp" id="coDoneTitle" tabindex="-1">Спасибо!</h2>
+      <p>Так выглядел бы заказ в настоящем магазине. ZARIA — вымышленный бренд из портфолио, лампу пока нельзя купить. Ничего не оформлено и никуда не отправлено.</p>
+      <div class="ck__done-row">
+        <button type="button" class="btn btn--ink" data-close>Вернуться к сайту</button>
+        <a class="btn btn--ghost" href="https://github.com/vivlk" target="_blank" rel="noopener">Автор кейса</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================== the clock that runs on scroll -->
+<div class="hud" id="hud">
+  <div class="hud__row">
+    <div class="hud__read">
+      <span class="hud__clock mono" id="clock">21:30</span>
+      <span class="hud__sub">
+        <span><b class="mono" id="kelvin">1800 K</b></span>
+        <span>свет <span class="mono" id="pct">12</span> %</span>
+      </span>
+    </div>
+    <p class="hud__note">Одна ночь с ZARIA — от вечернего янтаря до рассвета, который будит раньше будильника. Прокрутите.</p>
+  </div>
+  <div class="rail">
+    <div class="rail__fill" id="railFill"></div>
+    <div class="rail__ticks"><i></i><i></i><i></i><i></i><i></i></div>
+  </div>
+  <div class="rail__labels mono" id="railLabels">
+    <button type="button" data-stop="0" aria-current="true">21:30</button>
+    <button type="button" data-stop="1">21:50</button>
+    <button type="button" data-stop="2">02:10</button>
+    <button type="button" data-stop="3">05:40</button>
+    <button type="button" data-stop="4">06:40</button>
+  </div>
+</div>
+
+<main id="top">
+
+<!-- ============================================== the night -->
+<section class="night" id="night" aria-label="Одна ночь">
+  <div class="stage" id="stage">
+
+    <canvas id="sky" aria-hidden="true"></canvas>
+
+    <div class="skyclip" aria-hidden="true"><div class="sun" id="sun"></div></div>
+
+    <div class="surface" aria-hidden="true">
+      <div class="surf-dawn" id="surfDawn"></div>
+      <div class="pool" id="pool"></div>
+      <div class="reflect" id="reflect"></div>
+      <div class="contact" id="contact"></div>
+    </div>
+    <canvas id="dust" aria-hidden="true"></canvas>
+
+    <div class="typescrim" id="typeScrim" aria-hidden="true"></div>
+    <div class="halo halo--lamp" id="haloLamp" aria-hidden="true"></div>
+    <div class="halo halo--sun" id="haloSun" aria-hidden="true"></div>
+    <div class="horizon" aria-hidden="true"></div>
+    <div class="lampwrap" id="lampWrap" aria-hidden="true">
+      <canvas id="lampCanvas"></canvas>
+      <div class="cal" data-side="r"><i class="dot"></i><i class="ln"></i><span class="lab"><b>Матовое стекло, 96 мм</b><small>рассеивает свет без бликов и теней</small></span></div>
+      <div class="cal" data-side="r"><i class="dot"></i><i class="ln"></i><span class="lab"><b>Сенсорное кольцо</b><small>коснуться — свет, провести — яркость</small></span></div>
+      <div class="cal" data-side="r"><i class="dot"></i><i class="ln"></i><span class="lab"><b>CRI 95, до 5000 K</b><small>свет, в котором видно настоящий цвет</small></span></div>
+      <div class="cal" data-side="l"><i class="dot"></i><i class="ln"></i><span class="lab"><b>USB-C, 12 Вт</b><small>Bluetooth 5.3, без блока питания</small></span></div>
+      <div class="cal" data-side="r"><i class="dot"></i><i class="ln"></i><span class="lab"><b>Керамическое основание</b><small>856 г — не сдвинешь локтем во сне</small></span></div>
+    </div>
+
+    <div class="strip strip--type" id="stripType">
+
+      <article class="pan pan--hero">
+        <div class="pan__type">
+          <span class="chip"><i></i>ZARIA One · лампа-рассвет</span>
+          <h1 class="pan__h disp">
+            <span class="l">Просыпайтесь</span>
+            <span class="l dim">до будильника</span>
+          </h1>
+          <p class="pan__p">Свет разгорается за тридцать минут — не рывком, а как в июне. Тело просыпается само, ещё до того как зазвонит будильник.</p>
+          <div class="hero__cta">
+            <a class="btn btn--solid" href="#order" data-buy>Заказать лампу</a>
+            <a class="btn btn--line" href="#data">Смотреть данные <svg viewBox="0 0 16 16"><path d="M8 3v10M3.5 8.5 8 13l4.5-4.5"/></svg></a>
+          </div>
+        </div>
+      </article>
+
+      <article class="pan">
+        <div class="pan__type">
+          <span class="chip"><i></i>21:50 · 1800 K</span>
+          <h2 class="pan__h disp">
+            <span class="l">Свеча,</span>
+            <span class="l dim">которая гаснет сама</span>
+          </h2>
+          <ul class="pan__facts">
+            <li><b>21:30</b><span>переход в янтарный, плавно за двадцать минут</span></li>
+            <li><b>1800 K</b><span>ниже температуры свечи, без синего спектра</span></li>
+            <li><b>−15 мин</b><span>столько в среднем отыгрывает засыпание</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="pan">
+        <div class="pan__type">
+          <span class="chip"><i></i>02:10 · ночник 1 %</span>
+          <h2 class="pan__h disp">
+            <span class="l">Один процент</span>
+            <span class="l dim">и вы не проснётесь</span>
+          </h2>
+          <p class="pan__p">Встать ночью и вернуться, не включая верхний свет. Коснуться кольца — свет, провести по нему — яркость. Утром вы этого даже не вспомните.</p>
+        </div>
+      </article>
+
+      <article class="pan">
+        <div class="pan__type">
+          <span class="chip"><i></i>05:40 · рассвет начинается</span>
+          <h2 class="pan__h disp">
+            <span class="l">За тридцать минут</span>
+            <span class="l dim">до будильника</span>
+          </h2>
+          <ul class="pan__facts">
+            <li><b>1800 → 5000 K</b><span>подъём температуры за полчаса</span></li>
+            <li><b>CRI 95</b><span>свет, в котором комната выглядит комнатой</span></li>
+            <li><b>0 %</b><span>мерцания на любой яркости</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="pan">
+        <div class="pan__type">
+          <span class="chip"><i></i>06:40 · 5000 K, пик</span>
+          <h2 class="pan__h disp">
+            <span class="l">Вы уже проснулись.</span>
+            <span class="l dim">Будильник опоздал.</span>
+          </h2>
+          <p class="pan__p">На четырнадцатый день 71 % пользователей открывают глаза раньше сигнала — в среднем на шесть минут. Лампа не будит. Она возвращает утро.</p>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="flood" id="flood" aria-hidden="true"></div>
+    <i class="stageveil" id="stageVeil" aria-hidden="true"></i>
+  </div>
+</section>
+
+<!-- ============================================== day -->
+<div class="day" id="day">
+
+  <section class="sec" id="data">
+    <div class="wrap">
+      <header class="sec__head" data-rv>
+        <div>
+          <span class="kicker">Данные приложения</span>
+          <h2 class="h2 disp">Что меняется <b>за три недели.</b></h2>
+        </div>
+        <p class="lead">Самоотчёты в приложении ZARIA: ночи с первой по двадцать первую, протоколы «Вечер» и «Утро+».</p>
+      </header>
+
+      <dl class="readout" data-rv="2">
+        <div class="rd">
+          <span class="rd__ix">01</span>
+          <dt>Ночей записано</dt>
+          <dd>
+            <span class="num" data-count>4,1 <span class="u">млн</span></span>
+            <div class="rd__spark" aria-hidden="true"><i style="--h:14%"></i><i style="--h:19%"></i><i style="--h:23%"></i><i style="--h:30%"></i><i style="--h:34%"></i><i style="--h:41%"></i><i style="--h:47%"></i><i style="--h:52%"></i><i style="--h:60%"></i><i style="--h:66%"></i><i style="--h:71%"></i><i style="--h:79%"></i><i style="--h:86%"></i><i style="--h:94%"></i><i style="--h:100%"></i></div>
+            <div class="rd__axis" aria-hidden="true"><span>2024</span><span>сейчас</span></div>
+            <p>с момента запуска приложения — и каждую ночь прибавляется</p>
+          </dd>
+        </div>
+        <div class="rd">
+          <span class="rd__ix">02</span>
+          <span class="rd__chip">−44 %</span>
+          <dt>Время засыпания</dt>
+          <dd>
+            <span class="num">34 <span class="u">→</span> 19</span>
+            <div class="rd__pair" aria-hidden="true">
+              <span class="rd__bar"><i style="--w:100%"></i><em>до&nbsp;протокола<b>34 мин</b></em></span>
+              <span class="rd__bar rd__bar--now"><i style="--w:56%"></i><em>через&nbsp;три&nbsp;недели<b>19 мин</b></em></span>
+            </div>
+            <p>средняя по протоколу «Вечер» — минус 44&nbsp;%</p>
+          </dd>
+        </div>
+        <div class="rd">
+          <span class="rd__ix">03</span>
+          <dt>Просыпаются до сигнала</dt>
+          <dd>
+            <span class="num" data-count>71 <span class="u">%</span></span>
+            <div class="rd__dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i></div>
+            <div class="rd__legend" aria-hidden="true"><span><i></i>без будильника</span><span><i class="off"></i>с будильником</span></div>
+            <p>на четырнадцатый день будильник опаздывает на шесть минут</p>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <div class="stack">
+
+  <section class="sec stack__card" id="lamp">
+    <i class="stack__veil" aria-hidden="true"></i>
+    <div class="wrap">
+      <div class="pcard" data-rv>
+        <figure class="shot" id="shot">
+          <img src="img/za-05.webp" alt="Лампа ZARIA One: матовое стекло и керамическое основание" width="1024" height="1024" loading="lazy">
+          <span class="co co--a"><i></i>матовое стекло, 96 мм</span>
+          <span class="co co--b"><i></i>сенсорное кольцо</span>
+          <span class="co co--c"><i></i>керамическое основание</span>
+          <figcaption class="shot__cap">ZARIA One · 96 мм · 856 г</figcaption>
+        </figure>
+
+        <div class="pcard__body">
+          <span class="kicker">Лампа ZARIA One</span>
+          <h2 class="h2 disp pcard__h">Один предмет <b>на тумбочке.</b></h2>
+          <p class="pcard__lead">Утром это восход, вечером — свеча, ночью — ночник на один процент. Ни приложения на экране, ни кнопок: коснуться кольца, провести по нему.</p>
+
+          <ul class="specs">
+            <li><span>Температура света</span><span>1800–5000 K</span></li>
+            <li><span>Яркость</span><span>0–100 %, без мерцания</span></li>
+            <li><span>Индекс цветопередачи</span><span>CRI 95</span></li>
+            <li><span>Материалы</span><span>матовое стекло, керамика</span></li>
+            <li><span>Питание</span><span>USB-C, 12 Вт</span></li>
+            <li><span>Связь</span><span>Bluetooth 5.3</span></li>
+          </ul>
+
+          <div class="pcard__foot">
+            <span class="prod__from">от <b>14 900 ₽</b></span>
+            <a class="btn btn--ink prod__cta" href="#plans">Выбрать тариф <svg viewBox="0 0 16 16"><path d="M3 8h10M8.5 3.5 13 8l-4.5 4.5"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec stack__card" id="plans">
+    <i class="stack__veil" aria-hidden="true"></i>
+    <div class="wrap">
+      <header class="sec__head" data-rv>
+        <div>
+          <span class="kicker">Как начать</span>
+          <h2 class="h2 disp"><b>Одна лампа.</b> Три способа начать.</h2>
+        </div>
+        <p class="lead">Лампа во всех тарифах одна и та же. Разница — в приложении и в том, кто ведёт ваш график.</p>
+      </header>
+
+      <div class="plans" data-rv="2">
+        <article class="plan">
+          <span class="plan__name">Старт</span>
+          <p class="plan__d">Лампа и базовое приложение с рассветом и вечерним режимом.</p>
+          <div class="plan__price">14 900<small>₽</small></div>
+          <span class="plan__inc">Включено</span>
+          <ul>
+            <li>Лампа ZARIA One</li>
+            <li>Рассвет и вечерний режим</li>
+            <li>Три готовых протокола</li>
+            <li>Гарантия 3 года</li>
+          </ul>
+          <button type="button" class="btn btn--ghost" data-buy data-plan="start">Выбрать</button>
+        </article>
+        <article class="plan plan--hi">
+          <span class="plan__tag">чаще выбирают</span>
+          <span class="plan__name">Протокол</span>
+          <p class="plan__d">Лампа и подписка на 12 месяцев с персональным графиком.</p>
+          <div class="plan__price">19 900<small>₽</small></div>
+          <span class="plan__inc">Включено</span>
+          <ul>
+            <li>Лампа ZARIA One</li>
+            <li>Персональный график по хронотипу</li>
+            <li>Недельные отчёты о сне</li>
+            <li>Сомнолог в чате приложения</li>
+          </ul>
+          <button type="button" class="btn btn--solid" data-buy data-plan="protocol">Выбрать</button>
+        </article>
+        <article class="plan">
+          <span class="plan__name">Пара</span>
+          <p class="plan__d">Две лампы, два профиля, одна подписка на двоих.</p>
+          <div class="plan__price">34 900<small>₽</small></div>
+          <span class="plan__inc">Включено</span>
+          <ul>
+            <li>Две лампы ZARIA One</li>
+            <li>Два независимых профиля</li>
+            <li>Подписка на 12 месяцев</li>
+            <li>Отдельные будильники</li>
+          </ul>
+          <button type="button" class="btn btn--ghost" data-buy data-plan="pair">Выбрать</button>
+        </article>
+      </div>
+      <p class="plans__note" data-rv>Подписка после первого года — 490 ₽ в месяц, отключается в один тап. Доставка по России 1–3 дня, 30 ночей на возврат.</p>
+    </div>
+  </section>
+
+  <section class="sec stack__card" id="review">
+    <i class="stack__veil" aria-hidden="true"></i>
+    <div class="wrap">
+      <div class="revs">
+        <div class="revs__score" data-rv>
+          <span class="kicker">Отзывы</span>
+          <span class="num">4,9</span>
+          <span class="stars stars--lg" role="img" aria-label="Средняя оценка 4,9 из 5"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2l1.95 4.2 4.6.5-3.43 3.1.96 4.52L8 11.2l-4.08 2.32.96-4.52L1.45 5.9l4.6-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2l1.95 4.2 4.6.5-3.43 3.1.96 4.52L8 11.2l-4.08 2.32.96-4.52L1.45 5.9l4.6-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2l1.95 4.2 4.6.5-3.43 3.1.96 4.52L8 11.2l-4.08 2.32.96-4.52L1.45 5.9l4.6-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2l1.95 4.2 4.6.5-3.43 3.1.96 4.52L8 11.2l-4.08 2.32.96-4.52L1.45 5.9l4.6-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2l1.95 4.2 4.6.5-3.43 3.1.96 4.52L8 11.2l-4.08 2.32.96-4.52L1.45 5.9l4.6-.5z"/></svg></span>
+          <p>2 431 оценка в приложении за последний год. Девять из десяти — пять звёзд.</p>
+        </div>
+
+        <figure class="revs__lead" data-rv="2">
+          <blockquote class="disp">Открываю глаза за пару минут до света и лежу, смотрю, как он растёт. <b>Будильник не слышала ни разу с февраля.</b></blockquote>
+          <figcaption>
+            <span class="revs__face"><img src="img/za-06.webp" alt="Марина, покупательница ZARIA One" width="600" height="600" loading="lazy"></span>
+            <span class="revs__who"><b>Марина, Екатеринбург</b><small>ночь 43 · протокол «Утро+»</small></span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <ul class="revs__more" data-rv="3">
+        <li class="rv">
+          <span class="stars" role="img" aria-label="5 из 5"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2l1.95 4.2 4.6.5-3.43 3.1.96 4.52L8 11.2l-4.08 2.32.96-4.52L1.45 5.9l4.6-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2l1.95 4.2 4.6.5-3.43 3.1.96 4.52L8 11.2l-4.08 2.32.96-4.52L1.45 5.9l4.6-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2l1.95 4.2 4.6.5-3.43 3.1.96 4.52L8 11.2l-4.08 2.32.96-4.52L1.45 5.9l4.6-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2l1.95 4.2 4.6.5-3.43 3.1.96 4.52L8 11.2l-4.08 2.32.96-4.52L1.45 5.9l4.6-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2l1.95 4.2 4.6.5-3.43 3.1.96 4.52L8 11.2l-4.08 2.32.96-4.52L1.45 5.9l4.6-.5z"/></svg></span>
+          <p>«Вечерний режим включается сам в 21:40. Через неделю я перестал брать телефон в кровать — просто не тянет.»</p>
+          <span class="rv__who"><i class="rv__ava" aria-hidden="true">А</i><span><b>Антон, Казань</b><small>ночь 28 · протокол «Вечер»</small></span></span>
+        </li>
+        <li class="rv">
+          <span class="stars" role="img" aria-label="5 из 5"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2l1.95 4.2 4.6.5-3.43 3.1.96 4.52L8 11.2l-4.08 2.32.96-4.52L1.45 5.9l4.6-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2l1.95 4.2 4.6.5-3.43 3.1.96 4.52L8 11.2l-4.08 2.32.96-4.52L1.45 5.9l4.6-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2l1.95 4.2 4.6.5-3.43 3.1.96 4.52L8 11.2l-4.08 2.32.96-4.52L1.45 5.9l4.6-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2l1.95 4.2 4.6.5-3.43 3.1.96 4.52L8 11.2l-4.08 2.32.96-4.52L1.45 5.9l4.6-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2l1.95 4.2 4.6.5-3.43 3.1.96 4.52L8 11.2l-4.08 2.32.96-4.52L1.45 5.9l4.6-.5z"/></svg></span>
+          <p>«Питерская зима, темно в восемь утра. Впервые встаю без ощущения, что меня выдернули из ночи.»</p>
+          <span class="rv__who"><i class="rv__ava" aria-hidden="true">Н</i><span><b>Ника, Санкт-Петербург</b><small>ночь 61 · протокол «Утро+»</small></span></span>
+        </li>
+        <li class="rv">
+          <span class="stars" role="img" aria-label="5 из 5"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2l1.95 4.2 4.6.5-3.43 3.1.96 4.52L8 11.2l-4.08 2.32.96-4.52L1.45 5.9l4.6-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2l1.95 4.2 4.6.5-3.43 3.1.96 4.52L8 11.2l-4.08 2.32.96-4.52L1.45 5.9l4.6-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2l1.95 4.2 4.6.5-3.43 3.1.96 4.52L8 11.2l-4.08 2.32.96-4.52L1.45 5.9l4.6-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2l1.95 4.2 4.6.5-3.43 3.1.96 4.52L8 11.2l-4.08 2.32.96-4.52L1.45 5.9l4.6-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2l1.95 4.2 4.6.5-3.43 3.1.96 4.52L8 11.2l-4.08 2.32.96-4.52L1.45 5.9l4.6-.5z"/></svg></span>
+          <p>«Две лампы, два графика, две стороны кровати. Мы наконец перестали будить друг друга будильниками.»</p>
+          <span class="rv__who"><i class="rv__ava" aria-hidden="true">ИД</i><span><b>Илья и Даша, Москва</b><small>ночь 19 · тариф «Пара»</small></span></span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  </div><!-- /.stack -->
+</div>
+
+<!-- ============================================== the night comes back -->
+<section class="end" id="order">
+  <div class="end__sky" aria-hidden="true">
+    <div class="end__sun"></div>
+    <div class="end__line"></div>
+  </div>
+  <div class="wrap">
+    <div class="end__cta" data-rv>
+      <h2 class="h2 disp"><b>Завтра</b> можно проснуться иначе.</h2>
+      <div class="end__buy">
+        <button type="button" class="btn btn--solid" data-buy data-plan="protocol">Оформить заказ</button>
+        <a class="btn btn--line" href="#plans">Сравнить тарифы</a>
+      </div>
+      <p class="end__note">Доставка по России за 1–3 дня · 30 ночей, чтобы передумать</p>
+    </div>
+
+    <footer class="foot">
+      <div class="foot__brand">
+        <span class="wordmark">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 15.5h18" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M5.5 15.5a6.5 6.5 0 0 1 13 0z" fill="currentColor"/></svg>
+          ZARIA
+        </span>
+        <p>Система циркадного света: лампа, приложение и протокол сна. Концепт-кейс — бренд вымышленный.</p>
+      </div>
+      <div><h4>Продукт</h4><a href="#lamp">Лампа ZARIA One</a><a href="#data">Данные</a><a href="#plans">Протоколы</a></div>
+      <div><h4>Покупка</h4><a href="#plans">Тарифы и доставка</a><a href="#order" data-buy>Оформить заказ</a><a href="#review">Отзывы</a></div>
+      <div><h4>О кейсе</h4><a href="https://github.com/vivlk/zaria" target="_blank" rel="noopener">Исходный код</a><a href="https://github.com/vivlk" target="_blank" rel="noopener">Автор — vivlk</a><span class="foot__txt">Без cookies и трекеров</span></div>
+    </footer>
+    <div class="foot__bottom"><span>ZARIA — концепт-кейс дизайнера vivlk, 2026. Бренд, товар и отзывы вымышлены; сайт не является магазином или публичной офертой.</span><span>Никаких данных не собирается</span></div>
+  </div>
+</section>
+
+</main>
+
+<script type="module">
+import * as THREE from 'three';
+
+/* =====================================================================
+   the night, as data. every reading on screen comes from one scroll
+   variable running through these five moments.
+   ===================================================================== */
+const PANELS = 5;
+const MINUTES = [1290, 1310, 1570, 1780, 1840];   /* 21:30 21:50 02:10 05:40 06:40 */
+const KELVIN  = [2400, 1800, 1800, 2600, 5000];
+const PERCENT = [  35,   14,    1,   48,  100];
+/* how deep the night is at each moment: dusk still has colour in it, two in
+   the morning is the black of it, and by half past five the sky is greying */
+const NIGHT   = [0.30, 0.66, 1.00, 0.40, 0.00];
+
+/* Where the camera stands at each moment. Distance only ever shortens — the
+   foot of the lamp keeps landing on the canvas centre, which the CSS pins to
+   the horizon, so the object can be inspected without leaving the line. */
+const POSES = [
+  { dist:6.85, elev: 0.12, az: 0.30, focus:0.00 },   /* 21:30 — the whole object */
+  { dist:5.00, elev: 0.05, az:-0.55, focus:0.50 },   /* 21:50 — the glass */
+  { dist:4.40, elev:-0.05, az:-1.45, focus:0.88 },   /* 02:10 — the touch ring */
+  { dist:4.49, elev: 0.90, az:-3.05, focus:0.82 },   /* 05:40 — looking down on the cap, port round the back */
+  { dist:5.93, elev: 0.16, az:-3.85, focus:0.16 },   /* 06:40 — back out, a whole turn later */
+];
+
+const FOCUS = POSES.map(p => p.focus);
+const DIST  = POSES.map(p => p.dist);
+const ELEV  = POSES.map(p => p.elev);
+const AZ    = POSES.map(p => p.az);
+
+/* Each callout hangs off a real point on the model, in the lamp's own
+   coordinates, and each one is placed at the angle that turns to face the
+   camera exactly at its moment. */
+const CAL_SPEC = [
+  { stop:1, at:[ 0.265, 0.270, 0.170], n:[ 0.841, 0.10, 0.541] },   /* frosted glass */
+  { stop:2, at:[ 0.313,-0.020,-0.073], n:[ 0.974, 0.00,-0.227] },   /* touch ring */
+  { stop:3, at:[ 0.019, 0.620,-0.206], n:[ 0.061, 0.742,-0.665] },  /* shoulder of the cap */
+  { stop:3, at:[ 0.000,-0.154,-0.285], n:[ 0.000, 0.10,-1.000] },   /* usb-c */
+  { stop:4, at:[-0.245,-0.190,-0.155], n:[-0.845,-0.15,-0.535] },   /* ceramic foot */
+];
+
+const clamp01 = x => x < 0 ? 0 : x > 1 ? 1 : x;
+const smooth  = t => t * t * (3 - 2 * t);
+const lerp    = (a, b, t) => a + (b - a) * t;
+const mix     = (arr, pan) => {
+  const i = Math.max(0, Math.min(PANELS - 2, Math.floor(pan)));
+  return lerp(arr[i], arr[i + 1], clamp01(pan - i));
+};
+const pad2 = n => (n < 10 ? '0' : '') + n;
+const clockText = m => { const t = Math.round(m) % 1440; return pad2(Math.floor(t / 60)) + ':' + pad2(t % 60); };
+const spaced = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+/* --- phases of the scroll --- */
+const PAN_FROM = 0, PAN_TO = 0.88;
+/* eased segment by segment, so the world rests at every hour instead of
+   sliding past at a constant speed */
+const panOf = t => {
+  const u = clamp01((t - PAN_FROM) / (PAN_TO - PAN_FROM)) * (PANELS - 1);
+  const i = Math.min(PANELS - 2, Math.floor(u));
+  return i + smooth(clamp01(u - i));
+};
+/* the scroll rests on these: five moments plus the far side of the dawn */
+const SNAP_T = [0, 1, 2, 3, 4].map(k => PAN_FROM + k * (PAN_TO - PAN_FROM) / (PANELS - 1)).concat([1]);
+const dawnOf  = t => smooth(clamp01((t - 0.68) / 0.23));
+const floodOf = t => clamp01((t - 0.9) / 0.1);
+const introOf = t => clamp01(t / 0.05);
+
+/* =====================================================================
+   DOM
+   ===================================================================== */
+const $ = id => document.getElementById(id);
+const nightEl = $('night'), stage = $('stage');
+const stripType = $('stripType');
+const sun = $('sun'), haloLamp = $('haloLamp'), haloSun = $('haloSun');
+const lampWrap = $('lampWrap'), flood = $('flood'), typeScrim = $('typeScrim');
+const pool = $('pool'), reflect = $('reflect'), contact = $('contact'), surfDawn = $('surfDawn');
+const surface = pool.parentElement;
+let lastLampPx = -1;
+const bar = $('bar'), burger = $('burger'), sheet = $('sheet');
+const navEl = $('nav'), navFill = $('navFill');
+let navDay = null, navLit = -1;
+const hud = $('hud'), clockEl = $('clock'), kelvinEl = $('kelvin'), pctEl = $('pct'), railFill = $('railFill');
+const endEl = $('order'), dayEl = $('day');
+
+const calEls = Array.from(lampWrap.querySelectorAll('.cal'));
+const typePanels = Array.from(stripType.querySelectorAll('.pan__type'));
+
+/* --- letters --- */
+function buildLetters(el){
+  const text = el.dataset.text != null ? el.dataset.text : el.textContent;
+  el.textContent = '';
+  const out = [];
+  const words = text.split(' ');
+  words.forEach((word, wi) => {
+    const w = document.createElement('span');
+    w.className = 'wd';
+    for (const ch of word) {
+      const s = document.createElement('span');
+      s.className = 'ltr';
+      s.textContent = ch;
+      w.appendChild(s);
+      out.push(s);
+    }
+    el.appendChild(w);
+    if (wi < words.length - 1) el.appendChild(document.createTextNode(' '));
+  });
+  return out;
+}
+/* each headline assembles as its panel docks and comes apart as it leaves */
+const letterStyle = (a, i, total) => {
+  const delay = (i / Math.max(1, total)) * 0.45;
+  const e = smooth(clamp01((a - delay) / 0.5));
+  return { transform:`translate3d(0,${((1 - e) * 92).toFixed(1)}%,0)`, opacity:e.toFixed(3) };
+};
+const panelLetters = typePanels.map(p => {
+  const lines = Array.from(p.querySelectorAll('.pan__h .l'));
+  /* the split letters are decoration: the heading keeps its sentence for
+     screen readers, and the letter spans step out of the accessibility tree */
+  const h = p.querySelector('.pan__h');
+  if (h) h.setAttribute('aria-label', lines.map(l => (l.dataset.text != null ? l.dataset.text : l.textContent).trim()).join(' '));
+  lines.forEach(l => l.setAttribute('aria-hidden', 'true'));
+  const spans = lines.map(buildLetters);
+  const total = spans.reduce((n, s) => n + s.length, 0);
+  let off = 0;
+  return spans.map(s => { const r = { s, off, total }; off += s.length; return r; });
+});
+const lastLetterA = new Array(PANELS).fill(-1);
+function applyPanelLetters(idx, groups, a){
+  if (Math.abs(a - lastLetterA[idx]) < 0.004) return;
+  lastLetterA[idx] = a;
+  for (const g of groups) {
+    for (let i = 0; i < g.s.length; i++) {
+      const st = letterStyle(a, i + g.off, g.total);
+      const s = g.s[i].style;
+      s.transform = st.transform; s.opacity = st.opacity;
+    }
+  }
+}
+
+/* --- nav --- */
+function closeSheet(){ sheet.classList.remove('open'); burger.classList.remove('open'); burger.setAttribute('aria-expanded','false'); }
+burger.addEventListener('click', e => {
+  e.stopPropagation();
+  const open = sheet.classList.toggle('open');
+  burger.classList.toggle('open', open);
+  burger.setAttribute('aria-expanded', String(open));
+});
+/* a tap anywhere else, or Esc, puts the sheet away */
+document.addEventListener('pointerdown', e => {
+  if (!sheet.classList.contains('open')) return;
+  if (e.target.closest('#sheet') || e.target.closest('#burger')) return;
+  closeSheet();
+}, true);
+window.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a || a.hasAttribute('data-buy')) return;
+  const id = a.getAttribute('href').slice(1);
+  const el = id === 'top' ? null : document.getElementById(id);
+  if (id !== 'top' && !el) return;
+  e.preventDefault();
+  closeSheet();
+  leavePaged(2600);
+  if (lenis) lenis.scrollTo(el || 0, { duration:1.4, force:true, lock:true });
+  else if (el) el.scrollIntoView(); else window.scrollTo(0, 0);
+});
+
+/* =====================================================================
+   per-frame update
+   ===================================================================== */
+let endTop = 1e9;
+let nightH = 1;                      /* cached: the paged scroll reads it every frame */
+let dayTop = 1;                      /* document y where the day's curtain begins */
+let beamX = 0.54, beamY = 0.70;      /* where the lamp sits, 0..1 of the viewport */
+function measure(){
+  endTop = endEl.getBoundingClientRect().top + window.scrollY;
+  nightH = nightEl.offsetHeight;
+  /* where the day's first pixel sits: the night is a screen taller than its
+     timeline, and that last screen is where the day slides over it */
+  dayTop = Math.max(1, dayEl.getBoundingClientRect().top + window.scrollY);
+  const r = lampWrap.getBoundingClientRect();
+  if (r.width) {
+    beamX = (r.left + r.width / 2) / window.innerWidth;
+    beamY = (r.top + r.height / 2) / window.innerHeight;
+  }
+}
+
+let dawn = 0, litPct = 0, kelvin = 1800, focus = 0, panNow = 0, floodNow = 0, nightDepth = 0.3;
+
+/* called from the lamp's own frame, once the camera for this moment is set */
+function placeCallout(i, x, y, facing){
+  const el = calEls[i];
+  if (!el) return;
+  const spec = CAL_SPEC[i];
+  const near = clamp01(1.5 - Math.abs(panNow - spec.stop) * 2.6);
+  const a = near * clamp01(facing * 2.2) * (1 - floodNow);
+  el.style.opacity = a.toFixed(3);
+  if (a < 0.01) return;
+  const side = x < 0.46 ? 'l' : 'r';
+  if (el.dataset.side !== side) el.dataset.side = side;
+  el.style.transform = `translate(${side === 'l' ? '-100%' : '0'}, -50%)`;
+  el.style.left = (x * 100).toFixed(2) + '%';
+  el.style.top  = (y * 100).toFixed(2) + '%';
+}
+/* the first headline assembles once, after the loader — not on scroll.
+   Timed off the clock, not off frame deltas, so a slow first second on a
+   weak GPU does not stretch the entrance. */
+let heroIn = 0, heroStart = -1;
+const HERO_MS = 1150;
+
+function update(t){
+  const pan   = panOf(t);
+  const intro = Math.max(introOf(t), smooth(heroIn));
+  dawn        = dawnOf(t);
+  const fl    = floodOf(t);
+  panNow = pan; floodNow = fl;
+  focus = mix(FOCUS, pan);
+
+  /* readings */
+  const mins = mix(MINUTES, pan);
+  kelvin = mix(KELVIN, pan);
+  litPct = mix(PERCENT, pan);
+  nightDepth = mix(NIGHT, pan);
+  clockEl.textContent  = clockText(mins);
+  kelvinEl.textContent = spaced(Math.round(kelvin / 50) * 50) + ' K';
+  pctEl.textContent    = Math.round(litPct);
+  railFill.style.width = (pan / (PANELS - 1)) * 100 + '%';
+
+  /* the world slides past a fixed horizon; the last words dissolve into the
+     dawn before the day arrives, so nothing is left hanging under it */
+  stripType.style.transform = `translate3d(${-pan * 100}vw,0,0)`;
+  stripType.style.opacity = (1 - clamp01(fl * 1.9)).toFixed(3);
+
+  /* the shadow and the reflection are sized off the object as it is seen now,
+     so the contact stays believable through the whole tour */
+  const lampPx = Math.round(1.1572 * (lampWrap.clientHeight || 1) / mix(DIST, pan));
+  if (lampPx !== lastLampPx) { surface.style.setProperty('--lampw', lampPx + 'px'); lastLampPx = lampPx; }
+
+  for (let i = 0; i < typePanels.length; i++) {
+    const d = i - pan;
+    const ad = Math.abs(d);
+    const el = typePanels[i];
+    if (ad > 1.2) {                       /* off screen: park it and move on */
+      if (el.dataset.off !== '1') { el.dataset.off = '1'; el.style.opacity = '0'; el.style.visibility = 'hidden'; }
+      continue;
+    }
+    if (el.dataset.off === '1') { el.dataset.off = '0'; el.style.visibility = 'visible'; }
+    const a = clamp01(1.3 - ad * 1.3) * (i === 0 ? Math.min(1, intro) : 1);
+    el.style.opacity = a.toFixed(3);
+    el.style.transform = `translate3d(0,${(-d * 2.4).toFixed(2)}vh,0)`;
+    el.style.pointerEvents = a > 0.75 ? 'auto' : 'none';
+    applyPanelLetters(i, panelLetters[i], a);
+  }
+
+  /* the sun comes up behind the lamp */
+  sun.style.transform = `translate(-50%, ${lerp(112, 28, dawn)}%)`;
+  sun.style.opacity = clamp01(dawn * 3.2);
+  haloSun.style.opacity = dawn * 0.95;
+  haloLamp.style.opacity = (0.35 + 0.65 * (litPct / 100)) * (1 - dawn * 0.75);
+  haloLamp.style.transform = `translate(-50%,-50%) scale(${(1 - focus * 0.3).toFixed(3)})`;
+
+  /* what the lamp puts on the table: its pool, its smear, its shadow */
+  const lit = litPct / 100;
+  pool.style.opacity    = ((0.06 + 0.94 * Math.pow(lit, 0.7)) * (1 - dawn * 0.65)).toFixed(3);
+  reflect.style.opacity = ((0.05 + 0.95 * Math.pow(lit, 0.6)) * (1 - dawn * 0.55)).toFixed(3);
+  contact.style.opacity = (0.5 + 0.5 * (1 - lit) * (1 - dawn * 0.5)).toFixed(3);
+  surfDawn.style.opacity = dawn.toFixed(3);
+  typeScrim.style.opacity = dawn * 0.92;
+
+  /* the lamp hands over and dims */
+  lampWrap.style.opacity = clamp01(1 - fl * 2.2);
+
+  /* dawn floods the screen with light: the disc grows early and fades in, and
+     reaches full white exactly as the day begins to rise, so the two moves
+     read as one — the night dissolves rather than being wiped by an edge */
+  flood.style.transform = `translate(-50%,-50%) scale(${(2 + Math.pow(fl, 0.55) * 7).toFixed(3)})`;
+  flood.style.opacity = (Math.pow(fl, 1.25) * 0.42).toFixed(3);
+
+  /* chrome */
+  hud.classList.toggle('on', intro > 0.9 && fl < 0.6 && !loaderActive);
+
+  /* the capsule carries the night: its dome fills like the lamp, and the
+     whole thing turns from glass to paper as the day takes over */
+  const litN = Math.round(litPct * 0.13) / 10;          /* 0 … 13 px, in tenths */
+  if (litN !== navLit) { navLit = litN; navFill.style.height = litN + 'px'; }
+}
+
+/* =====================================================================
+   colour of light, by temperature
+   ===================================================================== */
+function kelvinRGB(k){
+  const t = Math.max(15, Math.min(90, k / 100));
+  const r = t <= 66 ? 255 : 329.698727446 * Math.pow(t - 60, -0.1332047592);
+  const g = t <= 66 ? 99.4708025861 * Math.log(t) - 161.1195681661
+                    : 288.1221695283 * Math.pow(t - 60, -0.0755148492);
+  const b = t >= 66 ? 255 : (t <= 19 ? 0 : 138.5177312231 * Math.log(t - 10) - 305.0447927307);
+  /* pulled a third of the way to white: a lamp shade is not a blackbody */
+  const m = v => clamp01(clamp01(v / 255) * 0.66 + 0.34);
+  return [m(r), m(g), m(b)];
+}
+
+/* =====================================================================
+   the sky: one mesh-gradient band above the line, reading the hour
+   ===================================================================== */
+const SKY_VS = `void main(){ gl_Position = vec4(position.xy, 0.0, 1.0); }`;
+
+/* The sky is one slow gradient. Everything that used to sparkle per pixel per
+   frame is gone: the only noise left is a static dither, which exists to kill
+   banding in the dark, not to be seen. */
+const SKY_FS = `precision highp float;
+uniform vec2 u_resolution;
+uniform float u_time, u_dawn, u_lamp, u_lampx, u_night;
+
+vec3 mod289(vec3 x){return x - floor(x*(1.0/289.0))*289.0;}
+vec2 mod289(vec2 x){return x - floor(x*(1.0/289.0))*289.0;}
+vec3 permute(vec3 x){return mod289(((x*34.0)+1.0)*x);}
+float snoise(vec2 v){
+  const vec4 C = vec4(0.211324865405187,0.366025403784439,-0.577350269189626,0.024390243902439);
+  vec2 i = floor(v + dot(v, C.yy));
+  vec2 x0 = v - i + dot(i, C.xx);
+  vec2 i1 = (x0.x > x0.y) ? vec2(1.0,0.0) : vec2(0.0,1.0);
+  vec4 x12 = x0.xyxy + C.xxzz; x12.xy -= i1;
+  i = mod289(i);
+  vec3 p = permute(permute(i.y + vec3(0.0,i1.y,1.0)) + i.x + vec3(0.0,i1.x,1.0));
+  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+  m = m*m; m = m*m;
+  vec3 x = 2.0*fract(p*C.www) - 1.0;
+  vec3 h = abs(x) - 0.5;
+  vec3 ox = floor(x + 0.5);
+  vec3 a0 = x - ox;
+  m *= 1.79284291400159 - 0.85373472095314*(a0*a0 + h*h);
+  vec3 g;
+  g.x = a0.x*x0.x + h.x*x0.y;
+  g.yz = a0.yz*x12.xz + h.yz*x12.yw;
+  return 130.0*dot(m,g);
+}
+float hash21(vec2 p){
+  p = fract(p * vec2(233.34, 851.73));
+  p += dot(p, p + 23.45);
+  return fract(p.x * p.y);
+}
+/* stars sit still: a twinkle at this scale reads as noise, not as sky.
+   thr sets how many cells get one; rad how large it draws. */
+float stars(vec2 uv, float thr, float rad){
+  vec2 cell = floor(uv), f = fract(uv);
+  float r = hash21(cell);
+  if (r < thr) return 0.0;
+  vec2 pos = vec2(hash21(cell + 17.3), hash21(cell + 41.7));
+  float d = distance(f, pos);
+  return smoothstep(rad, 0.0, d) * ((r - thr) / (1.0 - thr));
+}
+
+void main(){
+  vec2 st = gl_FragCoord.xy / u_resolution.xy;    /* y = 0 is the horizon line */
+  float asp = u_resolution.x / max(u_resolution.y, 1.0);
+  float t = u_time * 0.028;
+
+  /* one big, slow warp — low frequency only, so nothing shimmers */
+  float warp = snoise(vec2(st.x * 0.9 + t * 0.35, st.y * 1.25 - t * 0.25));
+  float h = clamp(st.y + warp * 0.07, -0.2, 1.6);
+
+  vec3 lowSky  = vec3(0.086, 0.081, 0.098);
+  vec3 midSky  = vec3(0.038, 0.038, 0.052);
+  vec3 topSky  = vec3(0.014, 0.015, 0.024);
+  vec3 col = mix(lowSky, midSky, smoothstep(0.02, 0.42, h));
+  col = mix(col, topSky, smoothstep(0.34, 1.05, h));
+
+  /* the hour is written in the sky itself. Dusk keeps a last dusty-rose band
+     on the horizon; the deep of the night pulls the top of the sky colder
+     and darker; the hour before dawn greys the line before any warmth. */
+  float dusk = (1.0 - u_night) * (1.0 - u_dawn) * exp(-max(h, 0.0) * 3.6);
+  col += vec3(0.30, 0.16, 0.19) * dusk * 0.30;
+  vec3 deepSky = vec3(0.006, 0.008, 0.018);
+  col = mix(col, deepSky, u_night * 0.6 * smoothstep(0.25, 1.0, h));
+  float preDawn = smoothstep(0.55, 0.0, u_night) * (1.0 - u_dawn) * exp(-max(h, 0.0) * 2.6);
+  col += vec3(0.10, 0.13, 0.19) * preDawn * 0.55;
+
+  /* a wide, very soft bloom sitting on the line, tinted by the lamp */
+  float lowGlow = exp(-max(h, 0.0) * 3.1) * exp(-pow((st.x - u_lampx) * 1.35, 2.0));
+  col += vec3(0.42, 0.24, 0.15) * lowGlow * (0.18 + 0.62 * u_lamp);
+
+  /* stars: a sparse field is always there; the deep of the night brings a
+     second, finer field out and lets a handful of brighter ones through.
+     They fade near the line, dim while the lamp is on, and go by sunrise. */
+  vec2 suv = vec2(st.x * asp, st.y);
+  float sf  = stars(suv * 26.0, 0.935, 0.085);
+  float sf2 = stars(suv * 44.0 + 7.0, 0.90, 0.11) * u_night;
+  float sf3 = stars(suv * 11.0 + 3.0, 0.982, 0.06) * smoothstep(0.45, 1.0, u_night);
+  float starA = smoothstep(0.06, 0.46, st.y) * (1.0 - u_dawn) * (1.0 - 0.55 * u_lamp);
+  col += vec3(0.86, 0.88, 1.0) * sf  * (0.5 + 0.3 * u_night) * starA;
+  col += vec3(0.78, 0.82, 0.95) * sf2 * 0.26 * starA;
+  col += vec3(0.95, 0.94, 1.0)  * sf3 * 0.9  * starA;
+
+  /* dawn: a warm band climbs out of the horizon, cool blue above it */
+  vec3 amber = vec3(0.97, 0.63, 0.36);
+  vec3 pale  = vec3(1.00, 0.91, 0.80);
+  vec3 steel = vec3(0.33, 0.40, 0.53);
+  float band = exp(-max(h, 0.0) * 2.1);
+  vec3 dawnCol = mix(steel, amber, band);
+  dawnCol = mix(dawnCol, pale, pow(band, 2.4) * 0.92);
+  col = mix(col, dawnCol, u_dawn * clamp(0.32 + band * 1.15, 0.0, 1.0));
+
+  /* the sun, still under the line */
+  float pre = exp(-distance(vec2(st.x, h), vec2(u_lampx, -0.08)) * 3.1);
+  col += vec3(1.0, 0.78, 0.56) * pre * u_dawn * 0.9;
+
+  /* a breath of vignette so the corners fall away */
+  col *= 1.0 - 0.28 * smoothstep(0.35, 1.25, length((st - vec2(0.5, 0.15)) * vec2(1.05, 0.85)));
+
+  /* static ordered dither — banding killer, invisible on its own */
+  float d = hash21(floor(gl_FragCoord.xy)) - 0.5;
+  col += d * (2.2 / 255.0);
+
+  gl_FragColor = vec4(clamp(col, 0.0, 1.0), 1.0);
+}`;
+
+function createSky(){
+  const canvas = $('sky');
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas, antialias:false, alpha:false, powerPreference:'high-performance' }); }
+  catch (e) { return null; }
+  renderer.setPixelRatio(1);
+  const scene = new THREE.Scene(), camera = new THREE.Camera();
+  const u = { u_resolution:{ value:new THREE.Vector2(1,1) }, u_time:{ value:0 }, u_dawn:{ value:0 }, u_lamp:{ value:0.35 }, u_lampx:{ value:0.54 }, u_night:{ value:0.3 } };
+  scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2), new THREE.ShaderMaterial({
+    uniforms:u, vertexShader:SKY_VS, fragmentShader:SKY_FS, depthTest:false, depthWrite:false,
+  })));
+  function resize(){
+    const w = Math.max(1, canvas.clientWidth), h = Math.max(1, canvas.clientHeight);
+    renderer.setSize(w, h, false);
+    u.u_resolution.value.set(w, h);
+  }
+  resize();
+  const t0 = performance.now();
+  let last = 0;
+  return { resize, frame(now, visible){
+    if (!visible) return;
+    if (now - last < 1000 / 30) return;
+    last = now;
+    u.u_time.value = (now - t0) / 1000;
+    u.u_dawn.value = dawn;
+    u.u_lamp.value = litPct / 100;
+    u.u_lampx.value = beamX;
+    u.u_night.value = nightDepth;
+    renderer.render(scene, camera);
+  }};
+}
+
+/* =====================================================================
+   the lamp — the object that stands on the line all night
+   ===================================================================== */
+const R = 0.31, SIDE = 0.39, BASE = 0.28;
+
+function emissiveTexture(){
+  const cv = document.createElement('canvas'); cv.width = 2; cv.height = 256;
+  const cx = cv.getContext('2d');
+  const gr = cx.createLinearGradient(0, 256, 0, 0);
+  gr.addColorStop(0,'#fff3e2'); gr.addColorStop(.3,'#ffecd4'); gr.addColorStop(.55,'#ffdcb6');
+  gr.addColorStop(.8,'#efb98c'); gr.addColorStop(1,'#b07d58');
+  cx.fillStyle = gr; cx.fillRect(0, 0, 2, 256);
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+
+function buildLamp(){
+  const g = new THREE.Group();
+  const domePts = [new THREE.Vector2(0,0), new THREE.Vector2(R*.5,0), new THREE.Vector2(R,0), new THREE.Vector2(R,SIDE)];
+  for (let i = 1; i <= 28; i++){ const a = i/28*Math.PI/2; domePts.push(new THREE.Vector2(R*Math.cos(a), SIDE + R*Math.sin(a))); }
+  const domeMat = new THREE.MeshPhysicalMaterial({
+    color:0xe9e0d2, roughness:.6, metalness:0,
+    clearcoat:.16, clearcoatRoughness:.55, sheen:.35, sheenColor:0xffe6c8,
+    emissive:0xffffff, emissiveMap:emissiveTexture(), emissiveIntensity:1,
+  });
+  g.add(new THREE.Mesh(new THREE.LatheGeometry(domePts, 72), domeMat));
+
+  const basePts = [new THREE.Vector2(0,-BASE), new THREE.Vector2(R-.04,-BASE)];
+  for (let i = 1; i <= 10; i++){ const a = i/10*Math.PI/2; basePts.push(new THREE.Vector2(R-.04+.05*Math.sin(a), -BASE+.05-.05*Math.cos(a))); }
+  basePts.push(new THREE.Vector2(R+.01,-.035), new THREE.Vector2(R-.02,-.035), new THREE.Vector2(0,-.035));
+  g.add(new THREE.Mesh(new THREE.LatheGeometry(basePts, 72), new THREE.MeshStandardMaterial({ color:0xb9ac9c, roughness:.85 })));
+
+  const ringPts = [new THREE.Vector2(R-.02,-.035), new THREE.Vector2(R+.012,-.035), new THREE.Vector2(R+.012,-.005), new THREE.Vector2(R-.02,-.005)];
+  g.add(new THREE.Mesh(new THREE.LatheGeometry(ringPts, 72), new THREE.MeshStandardMaterial({ color:0xd6c6b0, roughness:.28, metalness:.9 })));
+
+  /* A lathe is the same from every side, so the turn would read as nothing.
+     Two real details give it a front and a back. */
+  const port = new THREE.Mesh(
+    new THREE.BoxGeometry(0.082, 0.030, 0.026),
+    new THREE.MeshStandardMaterial({ color:0x241f1b, roughness:.55, metalness:.35 })
+  );
+  port.position.set(0, -0.154, -(R - 0.028));
+  g.add(port);
+
+  const dot = new THREE.Mesh(
+    new THREE.SphereGeometry(0.0135, 14, 10),
+    new THREE.MeshStandardMaterial({ color:0xfff3e2, emissive:0xffd6a6, emissiveIntensity:2.2, roughness:.35 })
+  );
+  dot.position.set(0, -0.02, R + 0.006);
+  g.add(dot);
+
+  g.position.y = BASE;   /* the foot of the lamp sits at y = 0, which is the horizon */
+  return { group:g, domeMat, dot };
+}
+
+function roomEnv(){
+  const c = document.createElement('canvas'); c.width = 1024; c.height = 512;
+  const g = c.getContext('2d');
+  const grad = g.createLinearGradient(0, 0, 0, 512);
+  grad.addColorStop(0, '#2a241f'); grad.addColorStop(.5, '#141116'); grad.addColorStop(1, '#07070a');
+  g.fillStyle = grad; g.fillRect(0, 0, 1024, 512);
+  for (const [x,y,r,col] of [[320,180,180,'rgba(255,214,172,0.6)'],[730,200,150,'rgba(255,229,196,0.35)'],[520,380,190,'rgba(150,120,96,0.25)']]) {
+    const rg = g.createRadialGradient(x,y,0,x,y,r);
+    rg.addColorStop(0,col); rg.addColorStop(1,'rgba(0,0,0,0)');
+    g.fillStyle = rg; g.beginPath(); g.arc(x,y,r,0,Math.PI*2); g.fill();
+  }
+  return c;
+}
+
+function createLamp(){
+  const canvas = $('lampCanvas');
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true, powerPreference:'high-performance' }); }
+  catch (e) { return null; }
+  renderer.setClearColor(0x000000, 0);
+  renderer.setPixelRatio(Math.min(2, Math.max(1, window.devicePixelRatio || 1)));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.08;
+
+  const scene = new THREE.Scene();
+  /* Always aimed at y = 0 — the foot — so however far the camera pulls in or
+     rises, that point stays on the canvas centre and the lamp keeps standing
+     on the horizon. */
+  const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 50);
+  camera.position.set(0, 0.12, 7.4);
+  camera.lookAt(0, 0, 0);
+
+  const amb = new THREE.AmbientLight(0xffffff, 0.12); scene.add(amb);
+  const key = new THREE.DirectionalLight(0xdfe6f2, 0.45); key.position.set(-2.2, 2.4, 2.6); scene.add(key);
+  const inner = new THREE.PointLight(0xffd6a6, 2.2, 5, 2); inner.position.set(0, 0.42, 0); scene.add(inner);
+
+  try {
+    const tex = new THREE.CanvasTexture(roomEnv());
+    tex.mapping = THREE.EquirectangularReflectionMapping;
+    tex.colorSpace = THREE.SRGBColorSpace;
+    const pm = new THREE.PMREMGenerator(renderer);
+    pm.compileEquirectangularShader();
+    scene.environment = pm.fromEquirectangular(tex).texture;
+    tex.dispose(); pm.dispose();
+  } catch (e) { /* env optional */ }
+
+  const { group, domeMat, dot } = buildLamp();
+  scene.add(group);
+
+  const pv = new THREE.Vector3(), nv = new THREE.Vector3(), wv = new THREE.Vector3();
+
+  function resize(){
+    const w = Math.max(1, canvas.clientWidth), h = Math.max(1, canvas.clientHeight);
+    /* the drawing buffer is capped by absolute size, not by the screen's dpr */
+    const pr = Math.min(1.5, window.devicePixelRatio || 1, 1500 / Math.max(w, h));
+    renderer.setPixelRatio(Math.max(0.8, pr));
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  resize();
+  const t0 = performance.now();
+  let last = 0;
+  return { resize, frame(now, visible, pan){
+    if (!visible) return;
+    if (now - last < 1000 / 40) return;
+    last = now;
+    const t = (now - t0) / 1000;
+    const [r, g, b] = kelvinRGB(kelvin);
+    domeMat.emissive.setRGB(r, g, b);
+    domeMat.emissiveIntensity = 0.14 + 1.9 * Math.pow(litPct / 100, 0.68);
+    inner.color.setRGB(r, g, b);
+    inner.intensity = 0.5 + 3.0 * (litPct / 100);
+    dot.material.emissiveIntensity = 1.2 + 2.4 * clamp01(1 - Math.abs(pan - 2) * 1.4);
+    /* at one per cent the object should read as a dark shape with one live
+       point on it, not as a lit product shot */
+    const lit = litPct / 100;
+    renderer.toneMappingExposure = 0.40 + 0.82 * Math.pow(lit, 0.6);
+    key.intensity = 0.14 + 0.5 * lit;
+    amb.intensity = 0.035 + 0.13 * lit;
+    scene.environmentIntensity = 0.22 + 0.78 * Math.pow(lit, 0.7);
+
+    /* the tour: turn, rise, close in — with a breath of drift so a paused
+       screen is never quite still */
+    group.rotation.y = mix(AZ, pan) + Math.sin(t * 0.11) * 0.022;
+    camera.position.set(0, mix(ELEV, pan) + Math.sin(t * 0.09) * 0.012, mix(DIST, pan));
+    camera.lookAt(0, 0, 0);
+    camera.updateMatrixWorld();
+
+    renderer.render(scene, camera);
+
+    /* hang the labels off the model itself */
+    group.updateMatrixWorld();
+    for (let i = 0; i < CAL_SPEC.length; i++) {
+      const s = CAL_SPEC[i];
+      wv.set(s.at[0], s.at[1], s.at[2]).applyMatrix4(group.matrixWorld);
+      nv.set(s.n[0], s.n[1], s.n[2]).normalize().applyQuaternion(group.quaternion);
+      pv.copy(camera.position).sub(wv).normalize();
+      const facing = nv.dot(pv);
+      pv.copy(wv).project(camera);
+      placeCallout(i, pv.x * 0.5 + 0.5, -pv.y * 0.5 + 0.5, facing);
+    }
+  }};
+}
+
+/* =====================================================================
+   dust in the beam — 2D, cheap, only alive under the line
+   ===================================================================== */
+function createDust(){
+  const canvas = $('dust');
+  const cx = canvas.getContext('2d', { alpha:true });
+  if (!cx) return null;
+  let W = 1, H = 1, DPR = 1;
+  const N = 68;
+  const P = [];
+  for (let i = 0; i < N; i++) P.push({
+    x:Math.random(), y:Math.random(), r:0.4 + Math.random() * 1.5,
+    vy:-(0.008 + Math.random() * 0.02), vx:(Math.random() - 0.5) * 0.006,
+    a:0.2 + Math.random() * 0.7, ph:Math.random() * 6.28,
+  });
+  function resize(){
+    DPR = Math.min(2, window.devicePixelRatio || 1);
+    W = Math.max(1, canvas.clientWidth); H = Math.max(1, canvas.clientHeight);
+    canvas.width = Math.round(W * DPR); canvas.height = Math.round(H * DPR);
+    cx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+  resize();
+  return { resize, frame(now, dt, visible){
+    if (!visible) { return; }
+    cx.clearRect(0, 0, W, H);
+    const [r, g, b] = kelvinRGB(kelvin);
+    const R8 = Math.round(r * 255), G8 = Math.round(g * 255), B8 = Math.round(b * 255);
+    const load = 0.28 + 0.72 * clamp01(litPct / 60);
+    for (const p of P) {
+      p.y += p.vy * dt * 60 * 0.016;
+      p.x += p.vx * dt * 60 * 0.016;
+      if (p.y < -0.05) { p.y = 1.05; p.x = Math.random(); }
+      if (p.x < -0.05) p.x = 1.05; else if (p.x > 1.05) p.x = -0.05;
+      const cxp = p.x * W, cyp = p.y * H;
+      /* only the air around the lamp catches enough light to show */
+      const dx = (p.x - beamX) * 2.7, dy = (p.y - beamY) * 2.1;
+      const beam = Math.exp(-(dx * dx + dy * dy));
+      const tw = 0.55 + 0.45 * Math.sin(now * 0.0012 + p.ph);
+      const a = p.a * beam * tw * load * 0.9;
+      if (a < 0.008) continue;
+      cx.fillStyle = `rgba(${R8},${G8},${B8},${a.toFixed(3)})`;
+      cx.beginPath(); cx.arc(cxp, cyp, p.r, 0, 6.2832); cx.fill();
+    }
+  }};
+}
+
+/* =====================================================================
+   loader: the mark builds itself — the line arrives, the disc rises,
+   then it sets again and the night starts
+   ===================================================================== */
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const ldr = $('ldr'), ldrLine = $('ldrLine'), ldrDisc = $('ldrDisc'), ldrWord = $('ldrWord'), ldrK = $('ldrK');
+const MIN_MS = REDUCED ? 600 : 2300, EXIT_MS = 720;
+
+let loaderActive = true;
+let coOpen = false;          /* the checkout sheet is up: the night does not take the wheel */
+/* the module is here: cancel the safety net. If it already fired (a very slow
+   network), the reader has seen the page — do not put a loader over it now */
+if (window.__zariaReady) window.__zariaReady();
+const LATE = document.documentElement.classList.contains('fallback');
+if (LATE) document.documentElement.classList.remove('fallback');   /* the real layout comes back before anything is measured */
+let started = -1, ex = 0, exiting = false;
+let sx = 0, sv = 0;                    /* spring for the rise */
+const easeInOut = t => (t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2) / 2);
+
+function stepLoader(dt, now){
+  if (LATE) { finishLoader(); return; }
+  if (started < 0) { started = now; return; }
+
+  const steps = Math.max(1, Math.ceil(dt / (1/120)));
+  const h = dt / steps;
+  for (let i = 0; i < steps; i++) { sv += (78 * (1 - sx) - 19 * sv) * h; sx += sv * h; }
+  sx = clamp01(sx);
+
+  if (!exiting && now - started >= MIN_MS) exiting = true;
+  if (exiting) ex = Math.min(1, ex + dt * 1000 / EXIT_MS);
+  const e = easeInOut(ex);
+
+  /* the line draws out, then keeps going and becomes the site's horizon */
+  const lineW = lerp(0, 172, smooth(clamp01(sx * 1.25))) * (1 - e) + window.innerWidth * 1.1 * e;
+  ldrLine.style.width = lineW + 'px';
+  ldrLine.style.opacity = String(1 - e * 0.35);
+
+  /* the disc rises, then sets again as the night begins */
+  const rise = lerp(100, 26, sx) * (1 - e) + 100 * e;
+  ldrDisc.style.transform = `translate(-50%, ${rise}%)`;
+  ldrDisc.style.opacity = String(clamp01(sx * 2));
+
+  ldrWord.style.opacity = String(clamp01((sx - 0.35) / 0.35) * (1 - e));
+  ldrWord.style.transform = `translateX(-50%) translateY(${(1 - sx) * 10}px)`;
+  ldrK.style.opacity = String(clamp01((sx - 0.5) / 0.35) * (1 - e));
+  ldrK.textContent = spaced(Math.round(lerp(1800, 2400, sx) / 50) * 50) + ' K';
+
+  ldr.style.opacity = String(1 - e);
+  if (ex >= 1) finishLoader();
+}
+
+function finishLoader(){
+  loaderActive = false;
+  heroStart = performance.now();
+  ldr.remove();
+  unlockScroll();
+  bar.classList.add('on');
+  const hash = location.hash.slice(1);
+  const el = hash && document.getElementById(hash);
+  if (el) requestAnimationFrame(() => {
+    if (lenis) lenis.scrollTo(el, { immediate:true }); else el.scrollIntoView();
+  });
+}
+
+/* --- scroll lock while the loader runs --- */
+let locked = true;
+const block = e => e.preventDefault();
+const KEYS = [' ','PageDown','PageUp','ArrowDown','ArrowUp','Home','End','Spacebar'];
+const blockKeys = e => { if (KEYS.indexOf(e.key) !== -1) e.preventDefault(); };
+function lockScroll(){
+  locked = true;
+  window.addEventListener('wheel', block, { passive:false });
+  window.addEventListener('touchmove', block, { passive:false });
+  window.addEventListener('keydown', blockKeys, { passive:false });
+  if (lenis) lenis.stop();
+}
+function unlockScroll(){
+  locked = false;
+  window.removeEventListener('wheel', block, { passive:false });
+  window.removeEventListener('touchmove', block, { passive:false });
+  window.removeEventListener('keydown', blockKeys, { passive:false });
+  if (lenis) lenis.start();
+}
+
+/* --- smooth scroll --- */
+let lenis = null;
+(function loadLenis(){
+  if (REDUCED) return;
+  const s = document.createElement('script');
+  s.src = 'vendor/lenis.min.js';
+  s.onload = () => {
+    try {
+      if (!window.Lenis) return;
+      lenis = new window.Lenis({ duration:1.1, smoothWheel:true, syncTouch:false });
+      if (locked) lenis.stop();
+    } catch (e) { lenis = null; }
+  };
+  s.onerror = () => { lenis = null; };
+  document.head.appendChild(s);
+})();
+
+/* =====================================================================
+   The night is paged, not scrolled. A nudge of the wheel commits to the
+   next moment and the page takes itself there, so every element lands on
+   its mark instead of drifting somewhere between two scenes. Nothing moves
+   between transitions, which is also why it stays smooth.
+   ===================================================================== */
+const STOPS = SNAP_T.slice(0, PANELS);          /* the five moments */
+let pageOn = false, stepping = false, idx = 0;
+let acc = 0, accAt = 0, holdOff = 0, coolUntil = 0;
+let tween = null;
+
+const railLabels = $('railLabels');
+const easeIO = x => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+
+/* the last screen of the night belongs to the curtain, not to the timeline */
+function nightSpan(){ return Math.max(1, dayTop - window.innerHeight); }
+function stopY(i){ return Math.round(STOPS[Math.max(0, Math.min(STOPS.length - 1, i))] * nightSpan()); }
+function inNight(){ return window.scrollY < dayTop - window.innerHeight * 0.12; }
+
+function markRail(){
+  if (!railLabels) return;
+  const kids = railLabels.children;
+  for (let i = 0; i < kids.length; i++) {
+    if (i === idx) kids[i].setAttribute('aria-current', 'true');
+    else kids[i].removeAttribute('aria-current');
+  }
+}
+
+function glideTo(y, ms){
+  tween = { from: window.scrollY, to: Math.round(y), t0: performance.now(), ms };
+  stepping = true;
+}
+/* the tween runs inside the one rAF loop the page already has */
+function advanceTween(now){
+  if (!tween) return;
+  const x = clamp01((now - tween.t0) / tween.ms);
+  window.scrollTo(0, Math.round(tween.from + (tween.to - tween.from) * easeIO(x)));
+  if (x >= 1) { tween = null; stepping = false; acc = 0; coolUntil = now + 240; }
+}
+
+function enterPaged(near){
+  if (pageOn || REDUCED || loaderActive) return;
+  pageOn = true;
+  if (lenis) lenis.stop();
+  if (near != null) { idx = near; markRail(); }
+}
+function leavePaged(holdMs){
+  if (!pageOn) return;
+  pageOn = false;
+  tween = null; stepping = false; acc = 0;
+  holdOff = performance.now() + (holdMs || 800);
+  if (lenis) lenis.start();
+}
+
+function goStop(i, ms){
+  i = Math.max(0, Math.min(STOPS.length - 1, i));
+  idx = i; markRail();
+  glideTo(stopY(i), ms != null ? ms : 950);
+}
+
+function step(dir){
+  if (stepping) return;
+  const next = idx + dir;
+  if (next < 0) { goStop(0, 520); return; }
+  if (next >= STOPS.length) {            /* past the last moment: through the
+                                            dawn and out into the daylight */
+    idx = STOPS.length - 1;
+    leavePaged(3600);
+    /* next frame, so the wheel event that asked for this is over and done
+       with before the page starts moving; locked, so it cannot be nudged
+       off course halfway through the dawn */
+    requestAnimationFrame(() => {
+      /* one long, gentle move that carries the dawn and the arrival of the
+         day in a single gesture */
+      if (lenis) lenis.scrollTo(dayTop, { duration:2.6, force:true, lock:true, easing:x => 0.5 - Math.cos(x * Math.PI) / 2 });
+      else glideTo(dayTop, 2600);
+    });
+    return;
+  }
+  goStop(next);
+}
+
+/* --- input, only while the night owns the screen --- */
+const WHEEL_TRIP = 46;
+window.addEventListener('wheel', e => {
+  if (!pageOn || coOpen) return;
+  e.preventDefault();
+  if (stepping) return;
+  if (performance.now() < coolUntil) { acc = 0; return; }
+  const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1;
+  const dy = e.deltaY * unit;
+  const now = performance.now();
+  if (now - accAt > 260 || Math.sign(dy) !== Math.sign(acc)) acc = 0;
+  accAt = now;
+  acc += dy;
+  if (Math.abs(acc) >= WHEEL_TRIP) { const d = acc > 0 ? 1 : -1; acc = 0; step(d); }
+}, { passive:false });
+
+let touchY = 0, touchGrab = false;
+window.addEventListener('touchstart', e => {
+  if (!pageOn || coOpen || !e.touches.length) return;
+  touchY = e.touches[0].clientY; touchGrab = true;
+}, { passive:true });
+window.addEventListener('touchmove', e => {
+  if (!pageOn || coOpen) return;
+  e.preventDefault();
+  if (stepping || !touchGrab || !e.touches.length) return;
+  const dy = touchY - e.touches[0].clientY;
+  if (Math.abs(dy) > 42) { touchGrab = false; step(dy > 0 ? 1 : -1); }
+}, { passive:false });
+window.addEventListener('touchend', () => { touchGrab = false; }, { passive:true });
+
+window.addEventListener('keydown', e => {
+  if (!pageOn || coOpen) return;
+  const k = e.key;
+  if (k === 'ArrowDown' || k === 'PageDown' || k === ' ' || k === 'Spacebar') { e.preventDefault(); step(1); }
+  else if (k === 'ArrowUp' || k === 'PageUp') { e.preventDefault(); step(-1); }
+  else if (k === 'Home') { e.preventDefault(); goStop(0, 900); }
+  else if (k === 'End') { e.preventDefault(); leavePaged(3200); if (lenis) lenis.scrollTo(dayTop, { duration:2.2, force:true, lock:true }); else glideTo(dayTop, 2200); }
+}, { passive:false });
+
+/* the moments in the rail are also the way to jump straight to one */
+if (railLabels) railLabels.addEventListener('click', e => {
+  const b = e.target.closest('button[data-stop]');
+  if (!b) return;
+  const i = +b.dataset.stop;
+  if (!pageOn) enterPaged(i);
+  stepping = false;
+  goStop(i, 1100);
+});
+
+/* the night takes the wheel back whenever it is on screen again */
+function watchPaged(){
+  if (REDUCED || loaderActive) return;
+  if (inNight()) {
+    if (!pageOn && performance.now() > holdOff) {
+      const y = window.scrollY;
+      let best = 0, bd = Infinity;
+      for (let i = 0; i < STOPS.length; i++) {
+        const d = Math.abs(stopY(i) - y);
+        if (d < bd) { bd = d; best = i; }
+      }
+      enterPaged(best);
+      if (bd > 4) goStop(best, Math.min(1700, 620 + bd * 0.55));
+    }
+  } else if (pageOn) {
+    leavePaged(400);
+  }
+}
+
+
+/* the capsule turns from glass to paper while the daylight sections are on
+   screen, and back to glass when the night returns at the foot of the page.
+   It lives here rather than in update(), because update() falls silent once
+   the timeline is spent and the reader is deep in the day. */
+function navState(){
+  const y = window.scrollY, vh = window.innerHeight;
+  const light = y > dayTop - vh * 0.55 && y + 140 < endTop;
+  if (light === navDay) return;
+  navDay = light;
+  navEl.classList.toggle('is-day', light);
+  sheet.classList.toggle('is-day', light);
+}
+
+/* =====================================================================
+   the handover: the day is the first card of the stack. As it climbs over
+   the night the stage steps back and dims — no flash, just one plane
+   passing in front of another.
+   ===================================================================== */
+const stageVeil = $('stageVeil');
+let lastCover = -1;
+function handover(){
+  if (REDUCED || !stageVeil) return;
+  const span = nightSpan();
+  const cover = clamp01((window.scrollY - span) / Math.max(1, window.innerHeight));
+  const q = cover * cover * (3 - 2 * cover);
+  if (Math.abs(q - lastCover) < 0.002) return;
+  lastCover = q;
+  stage.style.transform = q > 0 ? `scale(${(1 - q * 0.035).toFixed(4)})` : "";
+  stageVeil.style.opacity = (q * 0.18).toFixed(3);
+}
+
+/* =====================================================================
+   the stack: each card sits still at the top while the next one climbs
+   over it, and the one underneath steps back a little as it is covered.
+   Two style writes per card per frame — a transform and one opacity —
+   and only while the stack is actually on screen.
+   ===================================================================== */
+const stack = (function stackFx(){
+  const root = document.querySelector('.stack');
+  if (!root || REDUCED) return { frame(){} };
+  const cards = Array.from(root.children).filter(el => el.classList.contains('stack__card'));
+  if (cards.length < 2) return { frame(){} };
+  const veils = cards.map(c => c.querySelector('.stack__veil'));
+  let live = false, flat = false, last = [];
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(es => { live = es[0].isIntersecting; }, { rootMargin:'20% 0px' }).observe(root);
+  } else live = true;
+
+  function reset(){
+    for (let i = 0; i < cards.length; i++) {
+      cards[i].style.transform = '';
+      if (veils[i]) veils[i].style.opacity = '0';
+      last[i] = -1;
+    }
+  }
+
+  /* a card taller than the screen pins by its foot instead of its head: it
+     scrolls until its last line is in view, and only then holds still for
+     the next card to climb over it — so nothing is ever out of reach */
+  function fit(){
+    const vh = window.innerHeight;
+    for (const c of cards) {
+      const over = c.offsetHeight - vh;
+      c.style.top = over > 2 ? (-over) + 'px' : '';
+    }
+  }
+  fit();
+  window.addEventListener('resize', () => { clearTimeout(fit._t); fit._t = setTimeout(fit, 160); });
+  window.addEventListener('load', () => setTimeout(fit, 60));
+
+  return {
+    frame(){
+      /* below 900px the cards are an ordinary column again */
+      const off = window.innerWidth <= 900;
+      if (off) { if (!flat) { flat = true; reset(); } return; }
+      flat = false;
+      if (!live) return;
+      const vh = window.innerHeight;
+      for (let i = 0; i < cards.length - 1; i++) {
+        const nextTop = cards[i + 1].getBoundingClientRect().top;
+        /* 0 while the next card is still below the fold, 1 once it has
+           climbed all the way to the top */
+        const p = clamp01((vh - nextTop) / vh);
+        const q = p * p * (3 - 2 * p);
+        if (Math.abs(q - last[i]) < 0.002) continue;
+        last[i] = q;
+        cards[i].style.transform = q > 0 ? `scale(${(1 - q * 0.045).toFixed(4)})` : '';
+        if (veils[i]) veils[i].style.opacity = (q * 0.42).toFixed(3);
+      }
+    }
+  };
+})();
+
+/* =====================================================================
+   day side: reveals, callouts, counters, form
+   ===================================================================== */
+(function daySide(){
+  const items = Array.from(document.querySelectorAll('[data-rv], .shot'));
+  const seen = new Array(items.length).fill(false);
+  let io = null;
+
+  function reveal(i){
+    if (i < 0 || i >= items.length || seen[i]) return;
+    seen[i] = true;
+    const el = items[i];
+    el.classList.add('in');
+    if (io) io.unobserve(el);
+    for (const n of el.querySelectorAll('[data-count]')) countUp(n);
+  }
+
+  if ('IntersectionObserver' in window) {
+    io = new IntersectionObserver(es => {
+      for (const e of es) {
+        if (!e.isIntersecting) continue;
+        /* everything above the one that just appeared has already gone by:
+           a jump straight to an anchor must not leave a paragraph behind it
+           stuck at zero opacity for the rest of the visit */
+        for (let j = items.indexOf(e.target); j >= 0; j--) reveal(j);
+      }
+    }, { rootMargin:'0px 0px -6% 0px', threshold:0.08 });
+    for (const el of items) io.observe(el);
+  } else {
+    for (let i = 0; i < items.length; i++) reveal(i);
+  }
+
+  function countUp(el){
+    if (el.dataset.counted) return;
+    el.dataset.counted = '1';
+    if (REDUCED) return;
+    const node = Array.prototype.find.call(el.childNodes, n => n.nodeType === 3 && /\d/.test(n.textContent));
+    if (!node) return;
+    const raw = node.textContent;
+    const m = raw.match(/\d[\d  ]*(?:[.,]\d+)?/);
+    if (!m) return;
+    const txt = m[0].replace(/[\s ]+$/, '');
+    const target = parseFloat(txt.replace(/[\s ]/g, '').replace(',', '.'));
+    if (!isFinite(target)) return;
+    const dec = (txt.split(/[.,]/)[1] || '').length;
+    const pre = raw.slice(0, m.index), post = raw.slice(m.index + txt.length);
+    const fmt = v => {
+      const parts = v.toFixed(dec).split('.');
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+      return parts.join(',');
+    };
+    const t0 = performance.now(), DUR = 1250;
+    (function step(now){
+      const t = clamp01((now - t0) / DUR);
+      node.textContent = pre + fmt(target * (1 - Math.pow(1 - t, 3))) + post;
+      if (t < 1) requestAnimationFrame(step);
+    })(performance.now());
+  }
+
+  const form = $('form'), ok = $('formOk'), email = $('email');
+  if (form) form.addEventListener('submit', e => {
+    e.preventDefault();
+    if (!email.value || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value)) { email.focus(); return; }
+    ok.classList.add('on');
+    form.reset();
+  });
+})();
+
+
+/* =====================================================================
+   checkout — a demo. It behaves like a real order form, but nothing it
+   collects ever leaves the page: no request, no storage, no cookie. On
+   close or after "submit" every field is wiped.
+   ===================================================================== */
+(function checkout(){
+  const root = $('checkout'); if (!root) return;
+  const sheet = root.querySelector('.ck__sheet');
+  const form = $('coForm'), total = $('coTotal');
+  const stepForm = $('coStepForm'), stepDone = $('coStepDone');
+  const nameI = $('coName'), contI = $('coContact');
+  const nameE = $('coNameErr'), contE = $('coContactErr');
+  const submit = form.querySelector('.ck__submit');
+  const fmt = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ₽';
+  let lastFocus = null, timer = 0;
+
+  function sum(){
+    const p = form.querySelector('input[name="plan"]:checked');
+    const d = form.querySelector('input[name="ship"]:checked');
+    total.textContent = fmt((+p.dataset.price || 0) + (+d.dataset.price || 0));
+  }
+  function wipe(){
+    clearTimeout(timer);
+    form.reset(); sum();
+    for (const [i, e] of [[nameI, nameE], [contI, contE]]) { i.removeAttribute('aria-invalid'); e.textContent = ''; }
+    submit.removeAttribute('aria-busy'); submit.textContent = 'Оформить заказ';
+    stepForm.hidden = false; stepDone.hidden = true; stepDone.classList.remove('is-in');
+  }
+  function open(plan){
+    wipe();
+    if (plan) { const r = form.querySelector(`input[name="plan"][value="${plan}"]`); if (r) r.checked = true; sum(); }
+    lastFocus = document.activeElement;
+    coOpen = true;
+    if (lenis) lenis.stop();
+    document.documentElement.classList.add('co-lock');
+    root.hidden = false;
+    requestAnimationFrame(() => { root.classList.add('is-open'); });
+    setTimeout(() => { (form.querySelector('input[name="plan"]:checked') || nameI).focus({ preventScroll:true }); }, 60);
+    if (typeof closeSheet === 'function') closeSheet();
+  }
+  function close(){
+    if (root.hidden) return;
+    root.classList.remove('is-open');
+    coOpen = false;
+    document.documentElement.classList.remove('co-lock');
+    if (lenis && !pageOn && !locked) lenis.start();
+    setTimeout(() => { root.hidden = true; wipe(); }, REDUCED ? 0 : 320);
+    if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll:true });
+  }
+
+  document.addEventListener('click', e => {
+    const t = e.target.closest('[data-buy]');
+    if (t) { e.preventDefault(); open(t.dataset.plan); return; }
+    if (!root.hidden && e.target.closest('[data-close]')) { e.preventDefault(); close(); }
+  });
+  form.addEventListener('change', sum);
+  /* the page underneath stays put: only the sheet itself may scroll */
+  const pin = e => { if (!root.hidden && !e.target.closest('.ck__sheet')) e.preventDefault(); };
+  root.addEventListener('wheel', pin, { passive:false });
+  root.addEventListener('touchmove', pin, { passive:false });
+  window.addEventListener('wheel', e => { if (!root.hidden && sheet.scrollHeight <= sheet.clientHeight + 1) e.preventDefault(); }, { passive:false });
+
+  /* keyboard: Esc closes, Tab stays inside the sheet */
+  document.addEventListener('keydown', e => {
+    if (root.hidden) return;
+    if (e.key === 'Escape') { e.preventDefault(); close(); return; }
+    if (e.key !== 'Tab') return;
+    const f = Array.from(sheet.querySelectorAll('button,a[href],input:not([type="radio"]),input[type="radio"]:checked'))
+      .filter(el => !el.closest('[hidden]') && el.offsetParent !== null);
+    if (!f.length) return;
+    const first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+
+  /* validation on blur and on submit, messages right under the field */
+  const reEmail = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/;
+  function check(i, e){
+    let msg = '';
+    if (i === nameI && nameI.value.trim().length < 2) msg = 'Напишите, как к вам обращаться';
+    if (i === contI) {
+      const v = contI.value.trim(), digits = v.replace(/\D/g, '');
+      if (!v) msg = 'Нужен телефон или почта, чтобы связаться';
+      else if (!(reEmail.test(v) || (digits.length >= 10 && digits.length <= 15 && /^[\d\s()+\-]+$/.test(v)))) msg = 'Похоже на опечатку: проверьте номер или адрес';
+    }
+    e.textContent = msg;
+    if (msg) i.setAttribute('aria-invalid', 'true'); else i.removeAttribute('aria-invalid');
+    return !msg;
+  }
+  nameI.addEventListener('blur', () => { if (nameI.value) check(nameI, nameE); });
+  contI.addEventListener('blur', () => { if (contI.value) check(contI, contE); });
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const okN = check(nameI, nameE), okC = check(contI, contE);
+    if (!okN) { nameI.focus(); return; }
+    if (!okC) { contI.focus(); return; }
+    const who = nameI.value.trim().split(/\s+/)[0].slice(0, 24);
+    submit.setAttribute('aria-busy', 'true'); submit.textContent = 'Оформляем…';
+    timer = setTimeout(() => {
+      form.reset(); sum();                                  /* nothing is kept */
+      $('coDoneTitle').textContent = `Спасибо, ${who}!`;
+      stepForm.hidden = true; stepDone.hidden = false;
+      sheet.scrollTop = 0;
+      requestAnimationFrame(() => stepDone.classList.add('is-in'));
+      $('coDoneTitle').focus({ preventScroll:true });
+    }, REDUCED ? 0 : 700);
+  });
+  sum();
+})();
+
+/* =====================================================================
+   boot
+   ===================================================================== */
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+window.scrollTo(0, 0);
+measure();
+update(0);
+lockScroll();
+
+let sky = null, lamp = null, dustFx = null;
+let scenesReady = false, drawn = 0;
+function setupScenes(){
+  if (scenesReady) return;
+  scenesReady = true;
+  sky = createSky();
+  lamp = createLamp();
+  dustFx = createDust();
+}
+
+function computeT(){
+  return clamp01(window.scrollY / nightSpan());
+}
+
+let rt = 0;
+function onResize(){
+  clearTimeout(rt);
+  rt = setTimeout(() => {
+    measure();
+    if (pageOn) { tween = null; stepping = false; window.scrollTo(0, stopY(idx)); }
+    if (sky) sky.resize();
+    if (lamp) lamp.resize();
+    if (dustFx) dustFx.resize();
+    update(computeT());
+  }, 130);
+}
+window.addEventListener('resize', onResize);
+window.addEventListener('orientationchange', onResize);
+window.addEventListener('load', () => { measure(); if (sky) sky.resize(); if (lamp) lamp.resize(); if (dustFx) dustFx.resize(); });
+
+let prevT = performance.now(), lastT = -1;
+function frame(now){
+  requestAnimationFrame(frame);
+  const dt = Math.min(0.05, Math.max(0, (now - prevT) / 1000));
+  prevT = now;
+
+  if (lenis) { try { lenis.raf(now); } catch (e) {} }
+  advanceTween(now);
+  watchPaged();
+  if (locked && window.scrollY !== 0) window.scrollTo(0, 0);
+
+  stack.frame();
+  handover();
+  navState();
+
+  const t = computeT();
+  /* the night is a sticky stage: once it is behind us nothing here should
+     keep a GPU busy while the copy is being read */
+  const onStage = window.scrollY < dayTop + 2;
+  const heroWasIn = heroIn;
+  if (heroStart > 0) heroIn = clamp01((now - heroStart) / HERO_MS);
+  if (t !== lastT || loaderActive || heroIn !== heroWasIn) { update(t); lastT = t; }
+
+  if (sky) sky.frame(now, onStage || loaderActive);
+  if (lamp) lamp.frame(now, onStage || loaderActive, panOf(t));
+  if (dustFx) dustFx.frame(now, dt, onStage && floodOf(t) < 0.9);
+
+  if (loaderActive) stepLoader(dt, now);
+  if (!scenesReady && ++drawn > 1) setupScenes();
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
