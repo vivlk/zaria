@@ -12,14 +12,26 @@
 <meta property="og:image" content="img/za-05.webp">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230B0C10'/%3E%3Cpath d='M7 21.5h18' stroke='%23F2C29B' stroke-width='1.8' stroke-linecap='round'/%3E%3Cpath d='M9.5 21.5a6.5 6.5 0 0 1 13 0z' fill='%23F2C29B'/%3E%3C/svg%3E">
-<link rel="preload" href="fonts/zk-cyrillic-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="fonts/zk-cyrillic-500.woff2" as="font" type="font/woff2" crossorigin>
-<script type="importmap">
-{
-  "imports": {
-    "three": "./vendor/three.module.min.js"
+<script>
+/* Online the site loads everything from its own folder. Opened straight from
+   disk (file://), browsers refuse local modules and fonts, so the page takes
+   the same versions from a CDN instead — otherwise it would open without the
+   loader, the lamp and the night. */
+(function(){
+  var local = location.protocol !== 'file:';
+  var map = document.createElement('script');
+  map.type = 'importmap';
+  map.textContent = JSON.stringify({ imports:{ three: local ? './vendor/three.module.min.js'
+    : 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.min.js' } });
+  document.currentScript.after(map);
+  window.__zariaLocal = local;
+  if (!local) {
+    var f = document.createElement('link');
+    f.rel = 'stylesheet';
+    f.href = 'https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500;700&display=swap';
+    document.head.appendChild(f);
   }
-}
+})();
 </script>
 <style>
 /* шрифт лежит рядом с сайтом: ни одного запроса к сторонним серверам */
@@ -59,8 +71,10 @@
   --rule-l:rgba(20,19,17,.14);
 
   /* the horizon: one line the whole site is built on */
-  --hz:70vh;
-  --lx:60%;
+  --hz:85vh;
+  --lx:50%;
+  /* the lamp's canvas: the foot sits on its centre, so this sets how tall it stands */
+  --lamp-s:135vh;
 
   --ease:cubic-bezier(.2,.7,.2,1);
   --spring:cubic-bezier(.34,1.32,.5,1);
@@ -95,7 +109,7 @@
 
   /* ---- type: the reference's own scale. Display is one face at 400 with
      -.03em; body is a fixed 16/1.625 at 300; labels are 14 and 13. ---- */
-  --fz-hero:min(6.2vw,92px);
+  --fz-hero:min(4.7vw,74px);
   --fz-h2:clamp(30px,3.3vw,48px);
   --fz-h3:clamp(22px,2.05vw,30px);
   --fz-num:clamp(40px,4.4vw,68px);
@@ -122,7 +136,15 @@
   :root{ --sp-3:20px; --sp-4:28px; --sp-5:40px; --sp-6:56px; --sp-7:80px;
          --gutter:20px; --fz-lead:15px; --tile-h:50px }
 }
-@media (max-aspect-ratio: 1/1){ :root{ --hz:64vh; --lx:75%; --night-vh:620vh } }
+@media (max-aspect-ratio: 1/1){ :root{ --hz:84vh; --lx:50%; --lamp-s:96vh; --night-vh:620vh } }
+/* short landscape screens (a 13" laptop): a touch less lamp and type, so the
+   headline, the sentence and the button still clear the dome */
+@media (min-aspect-ratio: 1/1) and (max-height:820px){
+  :root{ --lamp-s:112vh; --fz-hero:min(4.7vw,8vh) }
+  .pan__type{padding-top:calc(var(--tile-h) + var(--sp-2) + var(--sp-2))}
+  .pan--hero .pan__p{margin-top:14px}
+  .hero__cta{margin-top:20px}
+}
 
 /* =============================================================== reset */
 *,*::before,*::after{margin:0;box-sizing:border-box}
@@ -398,9 +420,11 @@ p,li,dd,blockquote,figcaption,small{text-wrap:pretty}
 
 /* at dawn the sky turns pale, so the type gets ground to stand on */
 .typescrim{
-  position:absolute;left:0;top:0;width:min(72%,880px);height:var(--hz);z-index:4;
+  position:absolute;left:0;top:0;width:100%;height:var(--hz);z-index:4;
   pointer-events:none;opacity:0;
-  background:linear-gradient(90deg,rgba(10,9,12,.62) 0%,rgba(10,9,12,.34) 52%,rgba(10,9,12,0) 100%);
+  background:
+    radial-gradient(52% 44% at 50% 18%,rgba(10,9,12,.6) 0%,rgba(10,9,12,.3) 55%,rgba(10,9,12,0) 100%),
+    radial-gradient(34% 38% at 12% 88%,rgba(10,9,12,.5) 0%,rgba(10,9,12,0) 100%);
 }
 
 /* the line itself */
@@ -415,47 +439,65 @@ p,li,dd,blockquote,figcaption,small{text-wrap:pretty}
 .strip--type{z-index:7;height:var(--hz);align-items:stretch}
 .pan{width:100vw;flex:none;position:relative;height:100%}
 
-/* upper band: type only */
+/* The product stands in the middle of the screen and the words sit above
+   it, centred — a headline, one sentence, the action. On the moments of
+   the tour the supporting copy steps out to the left, beside the object,
+   so it never has to cross the lamp. */
 .pan__type{
-  position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;
-  padding:var(--sp-6) var(--gutter) var(--sp-4);
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+  justify-content:flex-start;text-align:center;
+  padding:calc(var(--tile-h) + var(--sp-2) + var(--sp-4)) var(--gutter) var(--sp-4);
   will-change:opacity,transform;
 }
-.pan--hero .pan__type{justify-content:center;padding-bottom:var(--sp-4)}
 .chip{
-  display:inline-flex;align-items:center;gap:10px;align-self:flex-start;
-  border:1px solid var(--rule-d);border-radius:999px;padding:8px 17px;margin-bottom:var(--sp-3);
+  display:inline-flex;align-items:center;gap:10px;
+  border:1px solid var(--rule-d);border-radius:999px;padding:8px 17px;margin-bottom:var(--sp-2);
   font-size:var(--fz-label);letter-spacing:0;color:rgba(248,243,234,.84);
   background:rgba(26,22,19,.66);
 }
 .chip i{width:5px;height:5px;border-radius:50%;background:var(--ember);flex:none}
 .pan__h{
-  font-size:var(--fz-hero);line-height:var(--lh-disp);letter-spacing:-.03em;max-width:13ch;
-  text-shadow:0 10px 40px rgba(6,4,2,.55);
+  font-size:var(--fz-hero);line-height:var(--lh-disp);letter-spacing:-.035em;
+  text-shadow:0 10px 40px rgba(6,4,2,.55);text-wrap:balance;
 }
 .pan__h .l{display:block}
 /* letters animate one by one, but words never break apart */
 .wd{display:inline-block;white-space:nowrap}
-.pan__h .dim{opacity:.4}
+.pan__h .dim{opacity:.42}
 .pan__p{
-  margin-top:var(--sp-4);max-width:28rem;
-  font-size:var(--fz-lead);line-height:var(--lh-lead);font-weight:300;color:rgba(248,243,234,.82);
-  text-shadow:0 2px 14px rgba(6,4,2,.6);
+  margin-top:20px;max-width:34rem;
+  font-size:var(--fz-lead);line-height:var(--lh-lead);font-weight:300;color:rgba(248,243,234,.8);
+  text-shadow:0 2px 14px rgba(6,4,2,.6);text-wrap:balance;
 }
+/* the supporting copy of each moment: a column on the left, at lamp height */
+.pan:not(.pan--hero) .pan__p,
+.pan__facts{
+  position:absolute;left:var(--gutter);bottom:var(--sp-5);
+  width:min(24rem,28vw);margin:0;text-align:left;text-wrap:pretty;
+}
+.pan:not(.pan--hero) .pan__p{font-size:var(--fz-body);line-height:1.34}
 /* facts sit on a soft glass panel rather than between hard rules */
 .pan__facts{
-  margin-top:var(--sp-3);display:flex;flex-direction:column;max-width:min(34rem,100%);
+  display:flex;flex-direction:column;
   border-radius:var(--r-m);padding:2px var(--sp-3);
   background:rgba(24,21,18,.62);border:1px solid rgba(255,255,255,.09);
 }
 .pan__facts li{
-  display:flex;align-items:baseline;justify-content:space-between;gap:var(--sp-3);
-  padding:13px 0;border-top:1px solid rgba(255,255,255,.08);font-size:var(--fz-body);
+  display:flex;flex-direction:column;gap:3px;
+  padding:12px 0;border-top:1px solid rgba(255,255,255,.08);font-size:var(--fz-label);line-height:1.3;
 }
 .pan__facts li:first-child{border-top:0}
 .pan__facts b{font-weight:500;color:var(--apricot);white-space:nowrap}
-.pan__facts span{color:rgba(248,243,234,.62);text-align:right}
-.hero__cta{display:flex;gap:var(--sp-1);margin-top:var(--sp-4);flex-wrap:wrap}
+.pan__facts span{color:rgba(248,243,234,.62)}
+.hero__cta{display:flex;gap:6px;margin-top:28px;justify-content:center}
+.btn--light{background:var(--linen);color:var(--ink)}
+.btn--light:hover{background:#fff}
+.btn-ico{
+  display:inline-grid;place-items:center;width:52px;height:52px;flex:none;border-radius:16px;
+  background:var(--ember);color:#fff;transition:background .35s var(--ease),transform .35s var(--ease);
+}
+.btn-ico:hover{background:var(--ember-deep);transform:translateX(2px)}
+.btn-ico svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:10px;
   height:52px;padding:0 var(--sp-4);border-radius:999px;font-size:17px;white-space:nowrap;
@@ -478,7 +520,7 @@ p,li,dd,blockquote,figcaption,small{text-wrap:pretty}
    close the tour gets. */
 .lampwrap{
   position:absolute;left:var(--lx);top:var(--hz);z-index:6;
-  width:min(150vmin,1250px);height:min(150vmin,1250px);
+  width:var(--lamp-s);height:var(--lamp-s);
   transform:translate(-50%,-50%);pointer-events:none;
 }
 #lampCanvas{width:100%;height:100%}
@@ -517,21 +559,29 @@ p,li,dd,blockquote,figcaption,small{text-wrap:pretty}
   position:absolute;inset:0;z-index:20;pointer-events:none;opacity:0;
   background:#0A0A0C;
 }
-/* portrait: the lamp steps aside so the type keeps the left of the line */
+/* portrait: one centred column above a centred lamp */
 @media (max-aspect-ratio: 1/1){
-  .lampwrap{width:min(150vmin,620px);height:min(150vmin,620px)}
-  .pan__type{padding:var(--sp-6) var(--gutter) var(--sp-3)}
-  .pan__h{font-size:min(10.4vw,52px);max-width:13ch;line-height:1.02}
-  .pan__p{font-size:var(--fz-body);max-width:60%;margin-top:var(--sp-2)}
-  .pan__facts{max-width:57%;margin-top:var(--sp-2);padding:2px var(--sp-2);border-radius:var(--r-s)}
-  .pan__facts li{font-size:var(--fz-micro);padding:10px 0;gap:2px;flex-direction:column;align-items:flex-start}
-  .pan__facts span{text-align:left}
-  /* no room beside the object on a phone — the facts panel carries the detail */
+  .pan__type{padding:calc(var(--tile-h) + var(--sp-2) + var(--sp-3)) var(--gutter) var(--sp-3)}
+  .pan__h{font-size:min(10.6vw,52px);max-width:14ch;line-height:1}
+  .pan__p,.pan:not(.pan--hero) .pan__p{
+    position:static;width:auto;max-width:36ch;margin-top:var(--sp-2);
+    font-size:var(--fz-body);line-height:1.32;text-align:center;
+  }
+  .pan__facts{
+    position:static;width:100%;max-width:360px;margin-top:var(--sp-2);
+    flex-direction:row;padding:4px;gap:4px;border-radius:var(--r-s);
+  }
+  .pan__facts li{flex:1;min-width:0;padding:8px 6px;border-top:0;text-align:center;align-items:center}
+  .pan__facts li + li{border-left:1px solid rgba(255,255,255,.08)}
+  .pan__facts span{display:none}
+  .pan__facts b{font-size:13px;white-space:normal}
+  /* no room beside the object on a phone */
   .cal{display:none}
   .chip{margin-bottom:var(--sp-2);font-size:11px;padding:6px 12px;letter-spacing:.1em}
-  .hero__cta{gap:var(--sp-1);margin-top:var(--sp-3)}
+  .hero__cta{margin-top:var(--sp-3)}
   .btn{height:46px;padding:0 var(--sp-3);font-size:15px}
-  .typescrim{width:92%;background:linear-gradient(90deg,rgba(10,9,12,.72) 0%,rgba(10,9,12,.56) 56%,rgba(10,9,12,0) 100%)}
+  .btn-ico{width:46px;height:46px;border-radius:14px}
+  .typescrim{background:radial-gradient(90% 46% at 50% 22%,rgba(10,9,12,.66) 0%,rgba(10,9,12,.3) 60%,rgba(10,9,12,0) 100%)}
 }
 
 .ltr{display:inline-block;vertical-align:bottom;will-change:transform,filter,opacity}
@@ -1333,8 +1383,8 @@ html.fallback .pan:not(:first-child){display:none}
           </h1>
           <p class="pan__p">Свет разгорается за тридцать минут — не рывком, а как в июне. Тело просыпается само, ещё до того как зазвонит будильник.</p>
           <div class="hero__cta">
-            <a class="btn btn--solid" href="#order" data-buy>Заказать лампу</a>
-            <a class="btn btn--line" href="#data">Смотреть данные <svg viewBox="0 0 16 16"><path d="M8 3v10M3.5 8.5 8 13l4.5-4.5"/></svg></a>
+            <a class="btn btn--light" href="#order" data-buy>Заказать лампу</a>
+            <a class="btn-ico" href="#order" data-buy aria-label="Оформить заказ"><svg viewBox="0 0 16 16"><path d="M3 8h10M8.5 3.5 13 8l-4.5 4.5"/></svg></a>
           </div>
         </div>
       </article>
@@ -1640,10 +1690,10 @@ const NIGHT   = [0.30, 0.66, 1.00, 0.40, 0.00];
    the horizon, so the object can be inspected without leaving the line. */
 const POSES = [
   { dist:6.85, elev: 0.12, az: 0.30, focus:0.00 },   /* 21:30 — the whole object */
-  { dist:5.00, elev: 0.05, az:-0.55, focus:0.50 },   /* 21:50 — the glass */
-  { dist:4.40, elev:-0.05, az:-1.45, focus:0.88 },   /* 02:10 — the touch ring */
-  { dist:4.49, elev: 0.90, az:-3.05, focus:0.82 },   /* 05:40 — looking down on the cap, port round the back */
-  { dist:5.93, elev: 0.16, az:-3.85, focus:0.16 },   /* 06:40 — back out, a whole turn later */
+  { dist:5.30, elev: 0.05, az:-0.55, focus:0.50 },   /* 21:50 — the glass */
+  { dist:5.00, elev:-0.05, az:-1.45, focus:0.88 },   /* 02:10 — the touch ring */
+  { dist:5.25, elev: 0.90, az:-3.05, focus:0.82 },   /* 05:40 — looking down on the cap, port round the back */
+  { dist:6.00, elev: 0.16, az:-3.85, focus:0.16 },   /* 06:40 — back out, a whole turn later */
 ];
 
 const FOCUS = POSES.map(p => p.focus);
@@ -2364,7 +2414,7 @@ let lenis = null;
 (function loadLenis(){
   if (REDUCED) return;
   const s = document.createElement('script');
-  s.src = 'vendor/lenis.min.js';
+  s.src = window.__zariaLocal === false ? 'https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js' : 'vendor/lenis.min.js';
   s.onload = () => {
     try {
       if (!window.Lenis) return;
